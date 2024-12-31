@@ -17,8 +17,9 @@ public class TrainingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "day_of_the_week", nullable = false)
-    private String dayOfTheWeek;
+    private DayOfTheWeek dayOfTheWeek;
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
