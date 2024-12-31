@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: gyma
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gyma
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+

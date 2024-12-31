@@ -1,0 +1,17 @@
+CREATE TABLE trainer (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    cpf_treinador VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE training_time (
+    id SERIAL PRIMARY KEY,
+    day_of_the_week VARCHAR(20) NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    students_limit INT NOT NULL CHECK (students_limit > 0),
+    trainer_id INT NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    CONSTRAINT fk_trainer FOREIGN KEY (trainer_id) REFERENCES trainer (id) ON DELETE CASCADE
+);
