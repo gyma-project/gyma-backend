@@ -2,7 +2,10 @@ CREATE TABLE trainer (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    cpf_treinador VARCHAR(100) NOT NULL
+    cpf_treinador VARCHAR(100) NOT NULL,
+    data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario INTEGER,
 );
 
 CREATE TABLE training_time (
@@ -13,5 +16,8 @@ CREATE TABLE training_time (
     students_limit INT NOT NULL CHECK (students_limit > 0),
     trainer_id INT NOT NULL,
     active BOOLEAN DEFAULT TRUE,
+    data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario INTEGER,
     CONSTRAINT fk_trainer FOREIGN KEY (trainer_id) REFERENCES trainer (id) ON DELETE CASCADE
 );
