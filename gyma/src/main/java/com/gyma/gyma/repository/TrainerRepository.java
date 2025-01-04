@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Integer> {
 
+    boolean existsByCpfTreinador(String cpfTreinador);
+    boolean existsByEmail(String email);
+
 }

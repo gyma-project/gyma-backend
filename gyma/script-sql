@@ -3,9 +3,9 @@ CREATE TABLE trainer (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     cpf_treinador VARCHAR(100) NOT NULL,
-    data_cadastro timestamp,
-    data_atualizacao timestamp,
-    id_usuario INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_usuario INTEGER
 );
 
 CREATE TABLE training_time (
@@ -16,8 +16,46 @@ CREATE TABLE training_time (
     students_limit INT NOT NULL CHECK (students_limit > 0),
     trainer_id INT NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-    data_cadastro timestamp,
-    data_atualizacao timestamp,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     id_usuario INTEGER,
     CONSTRAINT fk_trainer FOREIGN KEY (trainer_id) REFERENCES trainer (id) ON DELETE CASCADE
 );
+
+CREATE TABLE student (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    birth_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE training_record (
+    id SERIAL PRIMARY KEY,
+    student_id INT NOT NULL,
+    trainer_id INT NOT NULL,
+    height INT NOT NULL CHECK (height > 0)
+    weight DECIMAL(5, 2) NOT NULL CHECK (weight > 0),
+    description TEXT,
+    notes TEXT,
+    record_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_student_training_record FOREIGN KEY (student_id) REFERENCES student (id) ON DELETE CASCADE,
+    CONSTRAINT fk_trainer_training_record FOREIGN KEY (trainer_id) REFERENCES trainer (id) ON DELETE CASCADE
+);
+
+CREATE TABLE appointment (
+    id SERIAL PRIMARY KEY,
+    training_time_id INT NOT NULL,
+    student_id INT NOT NULL,
+    trainer_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_training_time_appointment FOREIGN KEY (training_time_id) REFERENCES training_time (id) ON DELETE CASCADE,
+    CONSTRAINT fk_student_appointment FOREIGN KEY (student_id) REFERENCES student (id) ON DELETE CASCADE,
+    CONSTRAINT fk_trainer_appointment FOREIGN KEY (trainer_id) REFERENCES trainer (id) ON DELETE CASCADE
+);
+
