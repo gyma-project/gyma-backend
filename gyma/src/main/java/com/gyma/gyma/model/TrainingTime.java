@@ -1,5 +1,6 @@
 package com.gyma.gyma.model;
 
+import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

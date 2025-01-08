@@ -1,9 +1,8 @@
 package com.gyma.gyma.controller.dto;
 
-import com.gyma.gyma.model.DayOfTheWeek;
+import com.gyma.gyma.model.enums.DayOfTheWeek;
 import com.gyma.gyma.model.Trainer;
 import com.gyma.gyma.model.TrainingTime;
-import jakarta.persistence.EnumType;
 
 import java.time.LocalTime;
 

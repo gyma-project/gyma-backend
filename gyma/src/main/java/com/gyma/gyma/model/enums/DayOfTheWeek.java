@@ -1,4 +1,4 @@
-package com.gyma.gyma.model;
+package com.gyma.gyma.model.enums;
 
 public enum DayOfTheWeek {
     DOMINGO,

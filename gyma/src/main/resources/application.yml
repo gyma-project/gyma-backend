@@ -10,23 +10,25 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  #security:
-   # oauth2:
-    #  client:
-     #   registration:
-      #    keycloak:
-       #     client-id: gyma_spring
-       #     client-secret: BQ9VSM4SMrlRoY11olsJVsiZNExUVAhC
-       #     scope: openid, profile, email
-       #     authorization-grant-type: authorization_code
-       #     redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
-     #   provider:
-     #     keycloak:
-      #      issuer-uri: http://localhost:8080/realms/gyma
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: gyma_spring
+            client-secret: BQ9VSM4SMrlRoY11olsJVsiZNExUVAhC
+            scope: openid, profile, email
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/gyma
 logging:
   level:
     org:
       springframework:
         web: DEBUG
+        security: DEBUG
 server:
+  # Back-end (8081) e Keycloak (8080)
   port: 8081
