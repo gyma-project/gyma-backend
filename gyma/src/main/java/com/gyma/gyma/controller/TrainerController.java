@@ -32,7 +32,7 @@ public class TrainerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Trainer>> listarTreinadores(@RequestBody TrainerDTO trainerDTO){
+    public ResponseEntity<List<Trainer>> listarTreinadores(){
         List<Trainer> trainers = trainerService.buscarTodos();
         if(trainers.isEmpty()){
             return ResponseEntity.noContent().build();
