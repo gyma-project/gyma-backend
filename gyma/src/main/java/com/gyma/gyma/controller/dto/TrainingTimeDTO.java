@@ -21,7 +21,6 @@ public record TrainingTimeDTO(
         training.setStartTime(this.startTime);
         training.setEndTime(this.endTime);
         training.setStudentsLimit(this.studentsLimit);
-        training.setTrainer(trainer);
         training.setActive(this.active);
         return training;
     }

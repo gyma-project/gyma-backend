@@ -35,15 +35,6 @@ public class TrainingTimeService {
             trainingTime.setStudentsLimit(trainingTimeDTO.studentsLimit());
             trainingTime.setActive(trainingTimeDTO.active());
 
-            // Recebe id do treinador, e faz uma busca pelo rep de treinadores
-            Optional<Trainer> optionalTrainer = trainerRepository.findById(trainingTimeDTO.trainerId());
-
-            if (optionalTrainer.isPresent()) {
-                Trainer trainer = optionalTrainer.get();
-                trainingTime.setTrainer(trainer);
-            } else {
-                throw new RuntimeException("Trainer não encontrado para o id: " + trainingTimeDTO.trainerId());
-            }
 
             return trainingTimeRepository.save(trainingTime);
 
