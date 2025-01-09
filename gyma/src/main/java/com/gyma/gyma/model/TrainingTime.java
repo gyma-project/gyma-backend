@@ -24,9 +24,9 @@ public class TrainingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "day_of_the_week", nullable = false)
-    private DayOfTheWeek dayOfTheWeek;
+    @ManyToOne
+    @JoinColumn(name = "day_id", nullable = false)
+    private Day day;
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;

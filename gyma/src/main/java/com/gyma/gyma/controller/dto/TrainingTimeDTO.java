@@ -1,13 +1,13 @@
 package com.gyma.gyma.controller.dto;
 
-import com.gyma.gyma.model.enums.DayOfTheWeek;
+import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.TrainingTime;
 
 import java.time.LocalTime;
 import java.util.UUID;
 
 public record TrainingTimeDTO(
-        DayOfTheWeek dayOfTheWeek,
+        Day day,
         LocalTime startTime,
         LocalTime endTime,
         Integer studentsLimit,
@@ -18,7 +18,7 @@ public record TrainingTimeDTO(
 
     public TrainingTime mapearParaTraining(){
         TrainingTime training = new TrainingTime();
-        training.setDayOfTheWeek(this.dayOfTheWeek);
+        training.setDay(this.day);
         training.setStartTime(this.startTime);
         training.setEndTime(this.endTime);
         training.setStudentsLimit(this.studentsLimit);

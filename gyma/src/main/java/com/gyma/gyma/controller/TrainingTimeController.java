@@ -1,7 +1,6 @@
 package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
-import com.gyma.gyma.model.Trainer;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.service.TrainerService;
 import com.gyma.gyma.service.TrainingTimeService;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("training-times")
@@ -31,9 +29,6 @@ public class TrainingTimeController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PostMapping
     public ResponseEntity<TrainingTime> salvar(@RequestBody TrainingTimeDTO training){
-        if (training.trainerId() == null) {
-            System.out.println("Está vazio!");
-        }
         trainingTimeService.salvar(training);
         return new ResponseEntity("Horário de Treino salvo com sucesso!", HttpStatus.CREATED);
     }

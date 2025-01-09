@@ -2,12 +2,22 @@ package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
+import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.TrainingTime;
+import com.gyma.gyma.model.enums.DayOfTheWeek;
+import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TrainingTimeService {
@@ -17,6 +27,9 @@ public class TrainingTimeService {
 
     @Autowired
     private TrainingTimeMapper trainingTimeMapper;
+
+    @Autowired
+    private DayRepository dayRepository;
 
     public TrainingTime salvar(TrainingTimeDTO trainingTimeDTO){
         TrainingTime training = trainingTimeMapper.toEntity(trainingTimeDTO);
