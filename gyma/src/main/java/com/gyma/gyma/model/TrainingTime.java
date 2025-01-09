@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @Table(name="training_time", schema = "public")
@@ -36,8 +37,8 @@ public class TrainingTime {
     @Column(name = "students_limit", nullable = false)
     private Integer studentsLimit;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private String trainer;
+    @Column(name = "trainer_id", nullable = false)
+    private UUID trainerId;
 
     @Column(nullable = false)
     private Boolean active;
@@ -50,6 +51,6 @@ public class TrainingTime {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false, length = 255)
-    private Integer idUsuario;
+    @Column(name = "edit_by", nullable = false)
+    private UUID idUsuario;
 }

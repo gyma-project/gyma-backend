@@ -8,6 +8,7 @@ import com.gyma.gyma.service.TrainingTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,18 +28,17 @@ public class TrainingTimeController {
         //List<TrainingTime> trainingTimes = trainingTimeService.getAllTrainingTimes();
         //return ResponseEntity.ok(trainingTimes);
     //}
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PostMapping
     public ResponseEntity<TrainingTime> salvar(@RequestBody TrainingTimeDTO training){
-        Trainer trainer = trainerService.buscarPorId(training.trainerId());
-        if (trainer == null) {
-            return new ResponseEntity("Trainer não encontrado!", HttpStatus.BAD_REQUEST);
+        if (training.trainerId() == null) {
+            System.out.println("Está vazio!");
         }
-        TrainingTime trainingEntity = training.mapearParaTraining(trainer);
-        trainingTimeService.salvar(trainingEntity);
+        trainingTimeService.salvar(training);
         return new ResponseEntity("Horário de Treino salvo com sucesso!", HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PatchMapping("/{id}")
     public ResponseEntity<TrainingTime> editarParcialmente(
             @PathVariable Integer id,
