@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,9 +28,14 @@ public class Day {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+            name = "day_training_time",
+            joinColumns = @JoinColumn(name = "day_id"),
+            inverseJoinColumns = @JoinColumn(name = "training_time_id")
+    )
     @JsonBackReference
-    private List<TrainingTime> trainingTimes;
+    private List<TrainingTime> trainingTimes = new ArrayList<>();
 
     @Override
     public String toString() {

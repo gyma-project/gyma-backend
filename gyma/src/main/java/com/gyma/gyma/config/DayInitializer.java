@@ -54,19 +54,23 @@ public class DayInitializer {
             if (!trainingTimeRepository.existsByDayAndStartTime(day, startTime)) {
                 TrainingTime trainingTime = createTrainingTime(day, startTime, endTime);
                 trainingTimeRepository.save(trainingTime);
+                day.getTrainingTimes().add(trainingTime);
+                dayRepository.save(day);
             }
         }
     }
 
     private TrainingTime createTrainingTime(Day day, LocalTime startTime, LocalTime endTime) {
         TrainingTime trainingTime = new TrainingTime();
-        trainingTime.setDay(day);
         trainingTime.setStartTime(startTime);
         trainingTime.setEndTime(endTime);
         trainingTime.setStudentsLimit(20);
         trainingTime.setTrainerId(UUID.randomUUID());
         trainingTime.setActive(true);
         trainingTime.setIdUsuario(UUID.randomUUID());
+
+        trainingTime.getDay().add(day);
+
         return trainingTime;
     }
 }

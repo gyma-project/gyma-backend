@@ -12,6 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,10 +28,9 @@ public class TrainingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "day_id", nullable = false)
+    @ManyToMany(mappedBy = "trainingTimes")
     @JsonManagedReference
-    private Day day;
+    private List<Day> day = new ArrayList<>();
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
@@ -56,4 +57,5 @@ public class TrainingTime {
 
     @Column(name = "edit_by", nullable = false)
     private UUID idUsuario;
+
 }

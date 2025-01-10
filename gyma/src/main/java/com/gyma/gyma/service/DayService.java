@@ -34,13 +34,14 @@ public class DayService {
 
             // Criar e salvar o horário
             TrainingTime trainingTime = new TrainingTime();
-            trainingTime.setDay(day);  // Associa o horário ao Dia
             trainingTime.setStartTime(startTime);
             trainingTime.setEndTime(endTime);
             trainingTime.setStudentsLimit(30);  // Exemplo de limite de alunos
             trainingTime.setActive(true);       // Horário ativo
             trainingTime.setTrainerId(UUID.randomUUID());  // Exemplo de ID do treinador
             trainingTime.setIdUsuario(UUID.randomUUID());  // Exemplo de ID do usuário que editou
+
+            trainingTime.getDay().add(day);
 
             trainingTimeRepository.save(trainingTime);  // Salva o horário
         }
