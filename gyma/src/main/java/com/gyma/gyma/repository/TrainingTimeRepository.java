@@ -11,6 +11,7 @@ public interface TrainingTimeRepository extends JpaRepository<TrainingTime, Inte
     boolean existsByDay(Day day);
     boolean existsByDayAndStartTimeBetween(Day day, LocalTime startTime, LocalTime endTime);
 
+
     // Verificar se já existe um horário específico para o dia e horário de início
     boolean existsByDayAndStartTime(Day day, LocalTime startTime);
 }

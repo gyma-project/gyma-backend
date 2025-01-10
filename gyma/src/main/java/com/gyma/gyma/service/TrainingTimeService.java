@@ -16,6 +16,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,9 +32,17 @@ public class TrainingTimeService {
     @Autowired
     private DayRepository dayRepository;
 
-    public TrainingTime salvar(TrainingTimeDTO trainingTimeDTO){
-        TrainingTime training = trainingTimeMapper.toEntity(trainingTimeDTO);
-        return trainingTimeRepository.save(training);
+    public List<TrainingTime> listarTodos() {
+        return trainingTimeRepository.findAll();
+    }
+
+    public TrainingTime buscarPorId(Integer id){
+        Optional<TrainingTime> optionalTrainingTime = trainingTimeRepository.findById(id);
+        if(optionalTrainingTime.isPresent()){
+            return optionalTrainingTime.get();
+        } else {
+            throw new RuntimeException("TrainingTime não encontrado para o id: " + id);
+        }
     }
 
     public TrainingTime editar(Integer id, TrainingTimeDTO trainingTimeDTO){

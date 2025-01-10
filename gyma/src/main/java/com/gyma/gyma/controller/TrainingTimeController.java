@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("training-times")
@@ -21,16 +23,18 @@ public class TrainingTimeController {
     @Autowired
     private TrainerService trainerService;
 
-    // @GetMapping
-    //public ResponseEntity<List<TrainingTime>> getAllTrainingTimes() {
-        //List<TrainingTime> trainingTimes = trainingTimeService.getAllTrainingTimes();
-        //return ResponseEntity.ok(trainingTimes);
-    //}
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
-    @PostMapping
-    public ResponseEntity<TrainingTime> salvar(@RequestBody TrainingTimeDTO training){
-        trainingTimeService.salvar(training);
-        return new ResponseEntity("Horário de Treino salvo com sucesso!", HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<TrainingTime>> getAllTrainingTimes() {
+        List<TrainingTime> trainingTimes = trainingTimeService.listarTodos();
+        return ResponseEntity.ok(trainingTimes);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @GetMapping("/{id}")
+    public ResponseEntity<TrainingTime> getTrainingTimeById(@PathVariable Integer id) {
+        TrainingTime trainingTime = trainingTimeService.buscarPorId(id);
+        return ResponseEntity.ok(trainingTime);
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")

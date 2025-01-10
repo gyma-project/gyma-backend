@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name="appointment")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class TrainingRecord {
 
     @Id
@@ -28,9 +30,6 @@ public class TrainingRecord {
 
     @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
     private String trainer;
-
-    @Column(name = "appointment_date", nullable = false)
-    private LocalDateTime appointmentDate;
 
     @CreatedDate
     @Column(name="created_at")

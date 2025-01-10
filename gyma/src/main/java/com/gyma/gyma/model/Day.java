@@ -1,5 +1,6 @@
 package com.gyma.gyma.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -27,6 +28,7 @@ public class Day {
     private Boolean active = true;
 
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<TrainingTime> trainingTimes;
 
     @Override

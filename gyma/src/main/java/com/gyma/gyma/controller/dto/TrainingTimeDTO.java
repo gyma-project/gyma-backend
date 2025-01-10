@@ -7,9 +7,6 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public record TrainingTimeDTO(
-        Day day,
-        LocalTime startTime,
-        LocalTime endTime,
         Integer studentsLimit,
         UUID trainerId,
         UUID idUsuario,
@@ -18,9 +15,6 @@ public record TrainingTimeDTO(
 
     public TrainingTime mapearParaTraining(){
         TrainingTime training = new TrainingTime();
-        training.setDay(this.day);
-        training.setStartTime(this.startTime);
-        training.setEndTime(this.endTime);
         training.setStudentsLimit(this.studentsLimit);
         training.setIdUsuario(this.idUsuario);
         training.setTrainerId(this.trainerId);

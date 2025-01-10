@@ -1,5 +1,7 @@
 package com.gyma.gyma.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +28,7 @@ public class TrainingTime {
 
     @ManyToOne
     @JoinColumn(name = "day_id", nullable = false)
+    @JsonManagedReference
     private Day day;
 
     @Column(name = "start_time", nullable = false)
@@ -37,7 +40,7 @@ public class TrainingTime {
     @Column(name = "students_limit", nullable = false)
     private Integer studentsLimit;
 
-    @Column(name = "trainer_id", nullable = false)
+    @Column(name = "trainer_id")
     private UUID trainerId;
 
     @Column(nullable = false)
