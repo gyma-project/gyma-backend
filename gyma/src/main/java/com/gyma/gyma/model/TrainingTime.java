@@ -1,7 +1,9 @@
 package com.gyma.gyma.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +30,7 @@ public class TrainingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(mappedBy = "trainingTimes")
+    @ManyToMany(mappedBy = "trainingTimes", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Day> day = new ArrayList<>();
 

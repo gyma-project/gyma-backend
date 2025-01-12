@@ -1,6 +1,5 @@
 package com.gyma.gyma.config;
 
-
 import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
@@ -10,7 +9,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.UUID;
@@ -32,45 +30,37 @@ public class DayInitializer {
             for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
                 Day day = new Day();
                 day.setName(dayOfTheWeek);
-                dayRepository.save(day);
+                day.setActive(true);
+                dayRepository.save(day); // Salva o dia inicialmente
 
-                createTrainingTimesForDay(day);
+                createTrainingTimesForDay(day); // Cria os horários de treino para o dia
             }
-            System.out.println("Os dias foram criados!");
+            System.out.println("Os dias e horários foram criados!");
         } else {
             System.out.println("Os dias já existem, pulando esta etapa...");
         }
     }
 
-    @Transactional
     private void createTrainingTimesForDay(Day day) {
         int startHour = 5;
-        int endHour = 22;
+        int endHour = 23;
 
         for (int currentHour = startHour; currentHour <= endHour; currentHour++) {
             LocalTime startTime = LocalTime.of(currentHour, 0);
             LocalTime endTime = startTime.plusHours(1);
 
-            if (!trainingTimeRepository.existsByDayAndStartTime(day, startTime)) {
-                TrainingTime trainingTime = createTrainingTime(day, startTime, endTime);
-                trainingTimeRepository.save(trainingTime);
-                day.getTrainingTimes().add(trainingTime);
-                dayRepository.save(day);
-            }
+            TrainingTime trainingTime = new TrainingTime();
+            trainingTime.setStartTime(startTime);
+            trainingTime.setEndTime(endTime);
+            trainingTime.setStudentsLimit(20);
+            trainingTime.setTrainerId(UUID.randomUUID());
+            trainingTime.setActive(true);
+            trainingTime.setIdUsuario(UUID.randomUUID());
+
+            day.getTrainingTimes().add(trainingTime);
+
+            trainingTimeRepository.save(trainingTime);
         }
-    }
-
-    private TrainingTime createTrainingTime(Day day, LocalTime startTime, LocalTime endTime) {
-        TrainingTime trainingTime = new TrainingTime();
-        trainingTime.setStartTime(startTime);
-        trainingTime.setEndTime(endTime);
-        trainingTime.setStudentsLimit(20);
-        trainingTime.setTrainerId(UUID.randomUUID());
-        trainingTime.setActive(true);
-        trainingTime.setIdUsuario(UUID.randomUUID());
-
-        trainingTime.getDay().add(day);
-
-        return trainingTime;
+        dayRepository.save(day);
     }
 }

@@ -28,7 +28,7 @@ public class Day {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "day_training_time",
             joinColumns = @JoinColumn(name = "day_id"),
