@@ -1,6 +1,6 @@
 package com.gyma.gyma.config;
 
-import br.com.danieleleao.app_auth_youtube.security.JWTConverter;
+import com.gyma.gyma.config.JWTConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

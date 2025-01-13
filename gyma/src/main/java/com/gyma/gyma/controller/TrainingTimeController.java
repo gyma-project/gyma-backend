@@ -32,8 +32,8 @@ public class TrainingTimeController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping("/{id}")
-    public ResponseEntity<TrainingTime> getTrainingTimeById(@PathVariable Integer id) {
-        TrainingTime trainingTime = trainingTimeService.buscarPorId(id);
+    public ResponseEntity<TrainingTimeDTO> getTrainingTimeById(@PathVariable Integer id) {
+        TrainingTimeDTO trainingTime = trainingTimeService.buscarPorId(id);
         return ResponseEntity.ok(trainingTime);
     }
 
