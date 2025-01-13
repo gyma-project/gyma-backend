@@ -9,10 +9,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="training_sheet", schema = "public")
+@Table(name="training_report", schema = "public")
 @Getter
 @Setter
-public class TrainingSheet {
+public class TrainingReport {
 
     @Id
     @Column(name = "id")
@@ -24,6 +24,12 @@ public class TrainingSheet {
 
     @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
     private String trainer;
+
+    @Column(name = "height")
+    private Double height;
+
+    @Column(name = "weight")
+    private Double weight;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
