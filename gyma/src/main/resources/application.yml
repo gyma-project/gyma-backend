@@ -32,3 +32,5 @@ logging:
 server:
   # Back-end (8081) e Keycloak (8080)
   port: 8081
+springdoc:
+  override-with-generic-response: false
