@@ -22,6 +22,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers("/trainers/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -48,7 +50,9 @@ public class SecurityConfiguration {
                   "/swagger-resources/**",
                   "/swagger-ui.html/**",
                   "/swagger-ui/**",
-                  "/webjars/**"
+                  "/webjars/**",
+                    "/actuator/prometheus",
+                "/actuator/**"
         );
     }
 

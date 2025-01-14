@@ -1,3 +1,4 @@
+# SPRING CONFIGS
 spring:
   application:
     name: gyma
@@ -23,14 +24,43 @@ spring:
         provider:
           keycloak:
             issuer-uri: http://localhost:8080/realms/gyma
+# END SPRING CONFINGS
+
+# LOGGING
 logging:
   level:
     org:
       springframework:
         web: DEBUG
-        security: DEBUG
+        security: TRACE
+        boot:
+          actuate: DEBUG
+        io.micrometer: DEBUG
+# END LOGGING
+
+# SERVER
+# Back-end (8081) e Keycloak (8080)
 server:
-  # Back-end (8081) e Keycloak (8080)
   port: 8081
+# END SERVER
+
+# SWAGGER
 springdoc:
   override-with-generic-response: false
+# END SWAGGER
+
+# GRAFANA
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    prometheus:
+      enabled: true
+# END GRAFANA/PROMETHEUS
