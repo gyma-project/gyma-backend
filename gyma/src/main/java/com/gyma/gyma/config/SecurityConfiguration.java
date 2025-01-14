@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,4 +39,17 @@ public class SecurityConfiguration {
         // Verifique se o URI está correto
         return NimbusJwtDecoder.withJwkSetUri("http://localhost:8080/realms/gyma/protocol/openid-connect/certs").build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> web.ignoring().requestMatchers(
+                  "/v2/api-docs/**",
+                  "/v3/api-docs/**",
+                  "/swagger-resources/**",
+                  "/swagger-ui.html/**",
+                  "/swagger-ui/**",
+                  "/webjars/**"
+        );
+    }
+
 }
