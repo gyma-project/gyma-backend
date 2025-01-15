@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="training_report", schema = "public")
+@Table(name="training_reports", schema = "public")
 @Getter
 @Setter
 public class TrainingReport {

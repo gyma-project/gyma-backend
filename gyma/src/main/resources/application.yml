@@ -16,7 +16,7 @@ spring:
         registration:
           keycloak:
             client-id: gyma_spring
-            client-secret: BQ9VSM4SMrlRoY11olsJVsiZNExUVAhC
+            client-secret: ZGWmpYDeTwHBj4RjnVK6m2s1KOK8QsFb
             scope: openid, profile, email
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
