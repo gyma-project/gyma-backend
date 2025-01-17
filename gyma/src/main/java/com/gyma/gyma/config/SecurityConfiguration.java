@@ -1,6 +1,6 @@
 package com.gyma.gyma.config;
 
-import com.gyma.gyma.config.JWTConverter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +35,6 @@ public class SecurityConfiguration {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Verifique se o URI está correto
         return NimbusJwtDecoder.withJwkSetUri("http://localhost:8080/realms/gyma/protocol/openid-connect/certs").build();
     }
 
