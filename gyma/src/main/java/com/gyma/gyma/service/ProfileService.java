@@ -60,6 +60,7 @@ public class ProfileService {
     }
 
     public ProfileRequestDTO criar(ProfileRequestDTO profileRequestDTO) {
+        profileExists(profileRequestDTO);
         Profile profile = new Profile();
         profile.setUsername(profileRequestDTO.username());
         profile.setEmail(profileRequestDTO.email());
@@ -83,6 +84,19 @@ public class ProfileService {
                 .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado para o ID: " + id));
 
         profileRepository.delete(profile);
+    }
+
+    // Métodos de validações
+    private void profileExists(ProfileRequestDTO profileRequestDTO){
+        if (profileRepository.existsByUsername(profileRequestDTO.username())) {
+            throw new IllegalArgumentException("Já existe um perfil com o username informado.");
+        }
+        if (profileRepository.existsByEmail(profileRequestDTO.email())) {
+            throw new IllegalArgumentException("Já existe um perfil com o email informado.");
+        }
+        if (profileRepository.existsByKeycloakId(profileRequestDTO.keycloakUserId())) {
+            throw new IllegalArgumentException("Já existe um perfil com o ID do Keycloak informado.");
+        }
     }
 
 }
