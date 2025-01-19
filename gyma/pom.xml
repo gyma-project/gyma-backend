@@ -71,6 +71,7 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- SECURITY -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -90,18 +91,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
+		<!-- END SECURITY -->
 
-		<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-spring-boot-starter</artifactId>
-			<version>20.0.1</version>
-		</dependency>
-
+		<!-- SWAGGER -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.6.0</version>
 		</dependency>
+		<!-- END SWAGGER -->
 
 	</dependencies>
 

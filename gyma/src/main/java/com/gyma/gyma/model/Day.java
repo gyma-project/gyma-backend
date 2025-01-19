@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "day", schema = "public")
+@Table(name = "days", schema = "public")
 @Getter
 @Setter
 public class Day {

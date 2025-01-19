@@ -8,5 +8,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ExerciseMapper {
     ExerciseDTO toDTO(Exercise exercise);
-    Exercise toEntity(Exercise exercise);
+    Exercise toEntity(ExerciseDTO exercise);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="training_time", schema = "public")
+@Table(name="training_times", schema = "public")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)

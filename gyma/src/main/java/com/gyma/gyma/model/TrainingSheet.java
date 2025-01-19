@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="training_sheet", schema = "public")
+@Table(name="training_sheets", schema = "public")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
