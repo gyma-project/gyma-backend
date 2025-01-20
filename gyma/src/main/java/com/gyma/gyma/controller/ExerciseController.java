@@ -36,5 +36,13 @@ public class ExerciseController {
         return ResponseEntity.ok(exerciseService.salvar(exerciseDTO));
     }
 
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @Operation(summary = "Deletar", description = "Criar exercício.")
+    public ResponseEntity<Void> deletar(@PathVariable Integer id){
+        exerciseService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

@@ -34,4 +34,8 @@ public class ExerciseService {
         return exerciseRepository.findAll();
     }
 
+    public void deletar(Integer id){
+        exerciseRepository.deleteById(id);
+    }
+
 }
