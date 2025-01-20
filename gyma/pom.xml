@@ -101,6 +101,14 @@
 		</dependency>
 		<!-- END SWAGGER -->
 
+		<!-- H2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- END H2 -->
+
 	</dependencies>
 
 	<build>
