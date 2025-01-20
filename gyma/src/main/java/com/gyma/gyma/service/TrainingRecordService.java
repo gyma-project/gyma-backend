@@ -1,5 +1,4 @@
 package com.gyma.gyma.service;
-
 import com.gyma.gyma.controller.dto.TrainingRecordDTO;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.TrainingRecordMapper;
@@ -7,6 +6,7 @@ import com.gyma.gyma.model.TrainingRecord;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingRecordRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gyma.gyma.model.TrainingRecord;
@@ -27,6 +27,9 @@ public class TrainingRecordService {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public List<TrainingRecord> listarTodos(){
         return trainingRecordRepository.findAll();
@@ -55,4 +58,11 @@ public class TrainingRecordService {
         trainingRecordRepository.deleteById(id);
     }
 
+    public String criarRelatorio() {
+        String mensagemRelatorio = "willianm1928@gmail.com;Relátorio de treinos";
+
+        rabbitTemplate.convertAndSend("notify", mensagemRelatorio);
+
+        return mensagemRelatorio;
+    }
 }
