@@ -2,13 +2,10 @@ package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
 import com.gyma.gyma.model.TrainingTime;
-import com.gyma.gyma.service.TrainerService;
 import com.gyma.gyma.service.TrainingTimeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +21,6 @@ public class TrainingTimeController {
     @Autowired
     private TrainingTimeService trainingTimeService;
 
-    @Autowired
-    private TrainerService trainerService;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping

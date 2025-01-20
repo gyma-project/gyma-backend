@@ -11,6 +11,6 @@ public record TrainingSheetDTO(
     UUID trainer,
     String description,
     List<Integer> exerciseIds,
-    UUID idUsuario
+    UUID updateBy
 ) {
 }

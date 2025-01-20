@@ -1,5 +1,6 @@
 package com.gyma.gyma.controller.dto;
 
+import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -23,11 +24,11 @@ public record TrainingTimeDTO(
         Boolean active
 ) {
 
-    public TrainingTime mapearParaTraining(){
+    public TrainingTime mapearParaTraining(Profile trainer){
         TrainingTime training = new TrainingTime();
         training.setStudentsLimit(this.studentsLimit);
         training.setIdUsuario(this.idUsuario);
-        training.setTrainerId(this.trainerId);
+        training.setTrainer(trainer);
         training.setActive(this.active);
         return training;
     }

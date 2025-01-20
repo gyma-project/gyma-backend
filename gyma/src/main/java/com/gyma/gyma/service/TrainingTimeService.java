@@ -1,8 +1,11 @@
 package com.gyma.gyma.service;
 
+import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
 import com.gyma.gyma.exception.ResourceNotFoundException;
+import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
+import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -24,6 +27,12 @@ public class TrainingTimeService {
     @Autowired
     private DayRepository dayRepository;
 
+    @Autowired
+    private ProfileService profileService;
+
+    @Autowired
+    private ProfileMapper profileMapper;
+
     public List<TrainingTime> listarTodos() {
         return trainingTimeRepository.findAll();
     }
@@ -35,15 +44,18 @@ public class TrainingTimeService {
     }
 
     public TrainingTime editar(Integer id, TrainingTimeDTO trainingTimeDTO){
-        Optional<TrainingTime> optionalTrainingTime = trainingTimeRepository.findById(id);
+        TrainingTime trainingTime = trainingTimeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
 
-        if(optionalTrainingTime.isPresent()){
-            TrainingTime trainingTime = optionalTrainingTime.get();
-            trainingTimeMapper.updateEntityFromDTO(trainingTimeDTO, trainingTime);
-            return trainingTimeRepository.save(trainingTime);
-        }   else {
-            throw new ResourceNotFoundException("Horário de treino não encontrado.");
-        }
+        ProfileRequestDTO trainer_exists = profileService.buscarPorUUID(trainingTimeDTO.trainerId());
+
+        trainingTimeMapper.updateEntityFromDTO(trainingTimeDTO, trainingTime);
+
+        Profile trainer = profileMapper.toEntity(trainer_exists);
+
+        trainingTime.setTrainer(trainer);
+
+        return trainingTimeRepository.save(trainingTime);
     }
 
 }

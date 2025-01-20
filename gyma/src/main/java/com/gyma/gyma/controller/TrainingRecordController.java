@@ -25,7 +25,7 @@ public class TrainingRecordController {
     @PostMapping
     @Operation(summary = "Criar", description = "Criar um agendamento.")
     public ResponseEntity<TrainingRecordDTO> criar(@RequestBody TrainingRecordDTO trainingRecordDTO) {
-        TrainingRecordDTO criado = trainingRecordService.criarRegistro(trainingRecordDTO);
+        TrainingRecordDTO criado = trainingRecordService.agendar(trainingRecordDTO);
         return new ResponseEntity<>(criado, HttpStatus.CREATED);
     }
 

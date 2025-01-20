@@ -39,8 +39,9 @@ public class TrainingTime {
     @Column(name = "students_limit", nullable = false)
     private Integer studentsLimit;
 
-    @Column(name = "trainer_id")
-    private UUID trainerId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @Column(nullable = false)
     private Boolean active;
