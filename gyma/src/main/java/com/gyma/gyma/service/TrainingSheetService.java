@@ -56,6 +56,10 @@ public class TrainingSheetService {
         return trainingSheetMapper.toDTO(trainingSheetRepository.save(trainingSheet));
     }
 
+    public void deletar(Integer id){
+        trainingSheetRepository.deleteById(id);
+    }
+
     public List<TrainingSheet> listar(){
         return trainingSheetRepository.findAll();
     }
