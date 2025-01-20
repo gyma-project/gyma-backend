@@ -25,11 +25,13 @@ public class TrainingRecord {
     @JoinColumn(name = "training_time_id", nullable = false)
     private TrainingTime trainingTime;
 
-    @Column(name = "keycloak_user_id", nullable = false, length = 255)
-    private String student;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Profile student;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private String trainer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @CreatedDate
     @Column(name="created_at")

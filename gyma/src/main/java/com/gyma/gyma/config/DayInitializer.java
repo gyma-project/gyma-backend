@@ -1,9 +1,11 @@
 package com.gyma.gyma.config;
 
 import com.gyma.gyma.model.Day;
+import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import com.gyma.gyma.repository.DayRepository;
+import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +24,23 @@ public class DayInitializer {
     @Autowired
     private TrainingTimeRepository trainingTimeRepository;
 
+    @Autowired
+    private ProfileRepository profileRepository;
+
     @PostConstruct
     @Async
     public void initializeDays() {
         // Verifica se os registros já existem no banco
         if (dayRepository.count() == 0) {
+            Profile defaultTrainer = profileRepository.
+                    findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
             for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
                 Day day = new Day();
                 day.setName(dayOfTheWeek);
                 day.setActive(true);
-                dayRepository.save(day); // Salva o dia inicialmente
+                dayRepository.save(day);
 
-                createTrainingTimesForDay(day); // Cria os horários de treino para o dia
+                createTrainingTimesForDay(day, defaultTrainer);
             }
             System.out.println("Os dias e horários foram criados!");
         } else {
@@ -41,7 +48,18 @@ public class DayInitializer {
         }
     }
 
-    private void createTrainingTimesForDay(Day day) {
+    private Profile createDefaultTrainer() {
+        Profile profile = new Profile();
+        profile.setUsername("default_trainer");
+        profile.setFirstName("Treinador");
+        profile.setLastName("Padrão");
+        profile.setEmail("default@gyma.com");
+        profile.setKeycloakId(UUID.randomUUID());
+        profileRepository.save(profile);
+        return profile;
+    }
+
+    private void createTrainingTimesForDay(Day day, Profile defaultTrainer) {
         int startHour = 5;
         int endHour = 23;
 
@@ -53,7 +71,7 @@ public class DayInitializer {
             trainingTime.setStartTime(startTime);
             trainingTime.setEndTime(endTime);
             trainingTime.setStudentsLimit(20);
-            trainingTime.setTrainerId(UUID.randomUUID());
+            trainingTime.setTrainer(defaultTrainer);
             trainingTime.setActive(true);
             trainingTime.setIdUsuario(UUID.randomUUID());
 

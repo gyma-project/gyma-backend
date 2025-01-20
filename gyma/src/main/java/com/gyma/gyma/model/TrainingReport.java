@@ -19,11 +19,13 @@ public class TrainingReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "keycloak_user_id", nullable = false, length = 255)
-    private String student;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Profile student;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private String trainer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @Column(name = "height")
     private Double height;
@@ -42,7 +44,7 @@ public class TrainingReport {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false, length = 255)
-    private Integer idUsuario;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 }

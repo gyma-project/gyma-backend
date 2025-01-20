@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name="training_sheets", schema = "public")
@@ -23,11 +22,13 @@ public class TrainingSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "keycloak_user_id", nullable = false, length = 255)
-    private UUID student;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Profile student;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private UUID trainer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @ManyToMany
     @JoinTable(
@@ -48,7 +49,8 @@ public class TrainingSheet {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false, length = 255)
-    private UUID idUsuario;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 
 }

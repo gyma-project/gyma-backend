@@ -59,6 +59,12 @@ public class ProfileService {
         return profileMapper.toDTO(profile);
     }
 
+    public ProfileRequestDTO buscarPorUUID(UUID uuid){
+        Profile profile = profileRepository.findByKeycloakId(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado para o ID: " + uuid));
+        return profileMapper.toDTO(profile);
+    }
+
     public ProfileRequestDTO criar(ProfileRequestDTO profileRequestDTO) {
         profileExists(profileRequestDTO);
         Profile profile = new Profile();

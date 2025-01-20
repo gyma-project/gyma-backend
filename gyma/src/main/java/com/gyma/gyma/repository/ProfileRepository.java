@@ -18,4 +18,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer>, JpaS
     Optional<Profile> findByUsername(String username);
     Optional<Profile> findByEmail(String email);
     Optional<Profile> findByKeycloakId(UUID keycloakId);
+    Optional<Profile> findFirstByOrderByIdAsc();
 }
