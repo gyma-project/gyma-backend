@@ -6,6 +6,11 @@ O GYMA (Gestão e Monitoramento de Academia) é uma solução tecnológica para 
 
 O aplicativo spring roda na porta `8081` e o keycloak `8080`.
 
+Para acessar o swagger
+`
+http://localhost:8081/swagger-ui/index.html
+`
+
 Para executar o Keycloak, use o comando abaixo:
 
 `
