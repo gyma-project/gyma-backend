@@ -2,9 +2,9 @@ spring:
   application:
     name: gyma
   datasource:
-    url: jdbc:postgresql://localhost:5432/gyma
+    url: jdbc:postgresql://localhost:5432/gymaintegrador
     username: postgres
-    password: root
+    password: pgadmin
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
