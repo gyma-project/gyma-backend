@@ -54,7 +54,8 @@ public class TrainingTime {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false)
-    private UUID idUsuario;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 
 }

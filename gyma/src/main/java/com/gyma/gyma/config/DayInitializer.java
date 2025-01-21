@@ -73,7 +73,7 @@ public class DayInitializer {
             trainingTime.setStudentsLimit(20);
             trainingTime.setTrainer(defaultTrainer);
             trainingTime.setActive(true);
-            trainingTime.setIdUsuario(UUID.randomUUID());
+            trainingTime.setUpdateBy(defaultTrainer);
 
             day.getTrainingTimes().add(trainingTime);
 
