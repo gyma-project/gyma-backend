@@ -32,4 +32,11 @@ public class TrainingSheetController {
     ){
         return ResponseEntity.ok(trainingSheetService.salvar(trainingSheetDTO));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar", description = "Deletar uma ficha de treino.")
+    public ResponseEntity<Void> deletarPorId(@PathVariable Integer id){
+        trainingSheetService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 }
