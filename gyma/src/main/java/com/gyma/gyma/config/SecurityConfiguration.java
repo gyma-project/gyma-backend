@@ -22,7 +22,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/api/profiles/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/profiles/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

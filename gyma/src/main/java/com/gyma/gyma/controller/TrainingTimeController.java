@@ -6,11 +6,14 @@ import com.gyma.gyma.service.TrainingTimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -25,9 +28,28 @@ public class TrainingTimeController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping
     @Operation(summary = "Listar", description = "Listar todos horários de treino.")
-    public ResponseEntity<List<TrainingTime>> getAllTrainingTimes() {
-        List<TrainingTime> trainingTimes = trainingTimeService.listarTodos();
-        return ResponseEntity.ok(trainingTimes);
+    public Page<TrainingTime> getAllTrainingTimes(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) UUID trainerId,
+            @RequestParam(required = false) String dayName,
+            @RequestParam(required = false) Integer studentLimit,
+            @RequestParam(required = false) UUID updateBy,
+            @RequestParam(required = false) LocalTime startTime,
+            @RequestParam(required = false) LocalTime endTime
+    ) {
+        return trainingTimeService.listarTodos(
+                startTime,
+                endTime,
+                studentLimit,
+                dayName,
+                trainerId,
+                active,
+                updateBy,
+                pageNumber,
+                size
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
