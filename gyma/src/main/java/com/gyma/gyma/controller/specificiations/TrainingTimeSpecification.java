@@ -64,4 +64,13 @@ public class TrainingTimeSpecification {
             return builder.equal(root.get("studentsLimit"), studentLimit);
         };
     }
+
+    public static Specification<TrainingTime> byUpdateBy(UUID updateByUuid) {
+        return (root, query, builder) -> {
+            if (ObjectUtils.isEmpty(updateByUuid)) {
+                return null;
+            }
+            return builder.equal(root.get("updateBy").get("keycloakId"), updateByUuid);
+        };
+    }
 }

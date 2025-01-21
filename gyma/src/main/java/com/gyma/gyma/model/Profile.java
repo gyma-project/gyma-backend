@@ -31,4 +31,6 @@ public class Profile {
     @Column(name = "keycloak_user_id", nullable = false, length = 255)
     private UUID keycloakId;
 
+
+
 }

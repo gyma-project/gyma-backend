@@ -71,6 +71,7 @@ public class TrainingTimeService {
                 .and(TrainingTimeSpecification.byActiveStatus(active))
                 .and(TrainingTimeSpecification.byTrainerKeycloakId(keycloakUserID))
                 .and(TrainingTimeSpecification.byStudentLimit(studentLimit)
+                .and(TrainingTimeSpecification.byUpdateBy(updateBy))
         );
 
         return trainingTimeRepository.findAll(spec, page);
