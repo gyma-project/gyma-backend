@@ -4,7 +4,9 @@ import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.specificiations.ProfileSpecification;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.model.Profile;
+import com.gyma.gyma.model.Role;
 import com.gyma.gyma.repository.ProfileRepository;
+import com.gyma.gyma.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +15,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfileService {
@@ -24,12 +30,16 @@ public class ProfileService {
     @Autowired
     private ProfileMapper profileMapper;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public Page<Profile> listarTodos(
             String username,
             String email,
             String firstName,
             String lastName,
             UUID keycloakID,
+            String role,
             Integer pageNumber,
             Integer size
     ) {
@@ -47,7 +57,8 @@ public class ProfileService {
                 .and(ProfileSpecification.byEmail(email))
                 .and(ProfileSpecification.byKeycloakId(keycloakID))
                 .and(ProfileSpecification.byFirstName(firstName))
-                .and(ProfileSpecification.byLastName(lastName));
+                .and(ProfileSpecification.byLastName(lastName)
+                .and(ProfileSpecification.byRole(role)));
 
         return profileRepository.findAll(spec, page);
     }
@@ -73,6 +84,14 @@ public class ProfileService {
         profile.setFirstName(profileRequestDTO.firstName());
         profile.setLastName(profileRequestDTO.lastName());
         profile.setKeycloakId(profileRequestDTO.keycloakUserId());
+
+        if (profileRequestDTO.roleIds() != null && !profileRequestDTO.roleIds().isEmpty()) {
+            Set<Integer> roleIdsSet = new HashSet<>(profileRequestDTO.roleIds());
+            List<Role> rolesList = roleRepository.findAllById(roleIdsSet);
+            Set<Role> roles = new HashSet<>(rolesList);
+            profile.setRoles(roles);
+        }
+
         profileRepository.save(profile);
         return profileMapper.toDTO(profile);
     }
@@ -103,6 +122,11 @@ public class ProfileService {
         if (profileRepository.existsByKeycloakId(profileRequestDTO.keycloakUserId())) {
             throw new IllegalArgumentException("Já existe um perfil com o ID do Keycloak informado.");
         }
+    }
+
+    public Set<Role> getRolesByIds(Set<Integer> roleIds) {
+        return roleRepository.findAllById(roleIds).stream()
+                .collect(Collectors.toSet());
     }
 
 }
