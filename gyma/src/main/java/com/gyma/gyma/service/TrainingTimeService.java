@@ -65,25 +65,25 @@ public class TrainingTimeService {
         Pageable page = PageRequest.of(pageNumber, size);
 
         Specification<TrainingTime> spec = Specification.where(
-                TrainingTimeSpecification.byStartTime(startTime))
+                        TrainingTimeSpecification.byStartTime(startTime))
                 .and(TrainingTimeSpecification.byEndTime(endTime))
                 .and(TrainingTimeSpecification.byDayName(dayName))
                 .and(TrainingTimeSpecification.byActiveStatus(active))
                 .and(TrainingTimeSpecification.byTrainerKeycloakId(keycloakUserID))
                 .and(TrainingTimeSpecification.byStudentLimit(studentLimit)
-                .and(TrainingTimeSpecification.byUpdateBy(updateBy))
-        );
+                        .and(TrainingTimeSpecification.byUpdateBy(updateBy))
+                );
 
         return trainingTimeRepository.findAll(spec, page);
     }
 
-    public TrainingTimeDTO buscarPorId(Integer id){
+    public TrainingTimeDTO buscarPorId(Integer id) {
         TrainingTime trainingTime = trainingTimeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
         return trainingTimeMapper.toDTO(trainingTime);
     }
 
-    public TrainingTime editar(Integer id, TrainingTimeDTO trainingTimeDTO){
+    public TrainingTime editar(Integer id, TrainingTimeDTO trainingTimeDTO) {
         TrainingTime trainingTime = trainingTimeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
 
