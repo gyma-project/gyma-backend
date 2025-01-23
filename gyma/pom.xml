@@ -154,6 +154,8 @@
 								<exclude>com/gyma/gyma/model/enums/**</exclude>
 								<exclude>com/gyma/gyma/config/**</exclude>
 								<exclude>com/gyma/gyma/mappers/**</exclude>
+								<exclude>com/gyma/gyma/exception/**</exclude>
+								<exclude>com/gyma/gyma/controller/**</exclude>
 							</excludes>
 						</configuration>
                     </execution>
