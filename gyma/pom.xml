@@ -150,10 +150,10 @@
 						<configuration>
 							<excludes>
 								<exclude>com/gyma/gyma/controller/dto/**</exclude>
+								<exclude>com/gyma/gyma/controller/specificiations/</exclude>
 								<exclude>com/gyma/gyma/model/enums/**</exclude>
 								<exclude>com/gyma/gyma/config/**</exclude>
 								<exclude>com/gyma/gyma/mappers/**</exclude>
-								<exclude>com/gyma/gyma/controller/specifications/**</exclude>
 							</excludes>
 						</configuration>
                     </execution>
