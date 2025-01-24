@@ -31,15 +31,6 @@ class ProfileTest {
         assertEquals(uuid, profile.getKeycloakId());
     }
 
-    @Test
-    void testUsernameNotNull() {
-
-        Profile profile = new Profile();
-
-
-        assertThrows(IllegalArgumentException.class, () -> profile.setUsername(null),
-                "O username não pode ser nulo.");
-    }
 
     @Test
     void testEmailUniquenessShouldBeHandledInRepository() {

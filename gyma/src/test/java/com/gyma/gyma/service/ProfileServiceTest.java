@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -94,22 +95,32 @@ class ProfileServiceTest {
 
     @Test
     void testCriar() {
+        UUID keycloakId = UUID.randomUUID();
         ProfileRequestDTO dto = mock(ProfileRequestDTO.class);
         when(dto.username()).thenReturn("username");
         when(dto.email()).thenReturn("email@example.com");
         when(dto.firstName()).thenReturn("First");
         when(dto.lastName()).thenReturn("Last");
-        when(dto.keycloakUserId()).thenReturn(UUID.randomUUID());
+        when(dto.keycloakUserId()).thenReturn(keycloakId);
 
         Profile profile = new Profile();
+        profile.setUsername("username");
+        profile.setEmail("email@example.com");
+        profile.setFirstName("First");
+        profile.setLastName("Last");
+        profile.setKeycloakId(keycloakId);
+
+        // Configuração dos retornos dos mocks
         when(profileRepository.save(any(Profile.class))).thenReturn(profile);
-        when(profileMapper.toDTO(profile)).thenReturn(dto);
+        when(profileMapper.toDTO(any(Profile.class))).thenReturn(dto); // Ajuste aqui
 
         ProfileRequestDTO result = profileService.criar(dto);
 
         assertNotNull(result);
+        assertEquals("username", result.username());
+        assertEquals("email@example.com", result.email());
         verify(profileRepository, times(1)).save(any(Profile.class));
-        verify(profileMapper, times(1)).toDTO(profile);
+        verify(profileMapper, times(1)).toDTO(any(Profile.class));
     }
 
     @Test
