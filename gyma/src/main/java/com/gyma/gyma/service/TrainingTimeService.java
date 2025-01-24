@@ -2,6 +2,7 @@ package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
+import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.controller.specificiations.TrainingTimeSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
@@ -77,20 +78,20 @@ public class TrainingTimeService {
         return trainingTimeRepository.findAll(spec, page);
     }
 
-    public TrainingTimeDTO buscarPorId(Integer id) {
+    public TrainingTime buscarPorId(Integer id) {
         TrainingTime trainingTime = trainingTimeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
-        return trainingTimeMapper.toDTO(trainingTime);
+        return trainingTime;
     }
 
-    public TrainingTime editar(Integer id, TrainingTimeDTO trainingTimeDTO) {
+    public TrainingTime editar(Integer id, TrainingTimeUpdateDTO trainingTimeDTO) {
         TrainingTime trainingTime = trainingTimeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
 
-        Profile trainer = profileRepository.findByKeycloakId(trainingTimeDTO.trainerId())
+        Profile trainer = profileRepository.findByKeycloakId(trainingTimeDTO.getTrainerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Treinador não encontrado."));
 
-        Profile updateUser = profileRepository.findByKeycloakId(trainingTimeDTO.updateBy())
+        Profile updateUser = profileRepository.findByKeycloakId(trainingTimeDTO.getUpdateBy())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário de atualização não encontrado."));
 
 

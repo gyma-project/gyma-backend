@@ -56,6 +56,39 @@ public class TrainingSheetService {
         return trainingSheetMapper.toDTO(trainingSheetRepository.save(trainingSheet));
     }
 
+    public TrainingSheet buscar(Integer id){
+        TrainingSheet trainingSheet = trainingSheetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Folha de treino não encontrada."));
+        return trainingSheet;
+    }
+
+    public TrainingSheetDTO editar(Integer id, TrainingSheetDTO trainingSheetDTO) {
+        TrainingSheet trainingSheet = trainingSheetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Folha de treino não encontrada."));
+
+        Optional<Profile> studentProfile = profileRepository.findByKeycloakId(trainingSheetDTO.student());
+        Optional<Profile> trainerProfile = profileRepository.findByKeycloakId(trainingSheetDTO.trainer());
+        Optional<Profile> updateByProfile = profileRepository.findByKeycloakId(trainingSheetDTO.updateBy());
+
+        if (studentProfile.isEmpty() || trainerProfile.isEmpty() || updateByProfile.isEmpty()) {
+            throw new ResourceNotFoundException("Algum perfil não foi encontrado.");
+        }
+
+        trainingSheet.setStudent(studentProfile.get());
+        trainingSheet.setDescription(trainingSheetDTO.description());
+        trainingSheet.setTrainer(trainerProfile.get());
+        trainingSheet.setUpdateBy(updateByProfile.get());
+
+        List<Exercise> exercises = exerciseRepository.findAllById(trainingSheetDTO.exerciseIds());
+        if (exercises.size() != trainingSheetDTO.exerciseIds().size()) {
+            throw new RuntimeException("Alguns IDs de exercícios são inválidos.");
+        }
+        trainingSheet.setExercises(exercises);
+
+        return trainingSheetMapper.toDTO(trainingSheetRepository.save(trainingSheet));
+    }
+
+
     public void deletar(Integer id){
         trainingSheetRepository.deleteById(id);
     }

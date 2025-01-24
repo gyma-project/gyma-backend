@@ -44,7 +44,13 @@ class ProfileServiceTest {
         when(profileRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
 
         Page<Profile> result = profileService.listarTodos(
-                "username", "email", "firstName", "lastName", UUID.randomUUID(), 0, 10
+                "username",
+                "email",
+                "firstName",
+                "lastName", UUID.randomUUID(),
+                "ADMIN",
+                0,
+                1
         );
 
         assertNotNull(result);
@@ -56,14 +62,15 @@ class ProfileServiceTest {
     void testBuscarPorId() {
         Profile profile = new Profile();
         profile.setId(1);
+
         when(profileRepository.findById(1)).thenReturn(Optional.of(profile));
-        when(profileMapper.toDTO(profile)).thenReturn(mock(ProfileRequestDTO.class));
 
-        ProfileRequestDTO result = profileService.buscarPorId(1);
+        Profile result = profileService.buscarPorId(1);
 
-        assertNotNull(result);
+        assertNotNull(result, "O resultado não pode ser nulo.");
+        assertEquals(profile, result, "O perfil retornado deve ser igual ao mockado.");
         verify(profileRepository, times(1)).findById(1);
-        verify(profileMapper, times(1)).toDTO(profile);
+        verifyNoInteractions(profileMapper);
     }
 
     @Test

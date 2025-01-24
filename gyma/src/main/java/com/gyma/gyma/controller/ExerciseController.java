@@ -47,7 +47,7 @@ public class ExerciseController {
         return ResponseEntity.ok(exerciseService.editar(id, exerciseDTO));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @Operation(summary = "Deletar", description = "Criar exercício.")
     public ResponseEntity<Void> deletar(@PathVariable Integer id){

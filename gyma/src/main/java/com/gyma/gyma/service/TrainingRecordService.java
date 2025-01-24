@@ -57,6 +57,8 @@ public class TrainingRecordService {
     }
 
     public void deletar(Integer id){
+        TrainingRecord trainingRecord = trainingRecordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado."));
         trainingRecordRepository.deleteById(id);
     }
 
@@ -86,7 +88,7 @@ public class TrainingRecordService {
 
         System.out.println(emailList);
 
-        String mensagemRelatorio = "willianm1928@gmail.com;" + templateRelatorio;
+        String mensagemRelatorio = "dinizrobert2002@gmail.com;" + templateRelatorio;
 
 
 

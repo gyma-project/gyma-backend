@@ -63,11 +63,11 @@ public class ProfileService {
         return profileRepository.findAll(spec, page);
     }
 
-    public ProfileRequestDTO buscarPorId(Integer id) {
+    public Profile buscarPorId(Integer id) {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado para o ID: " + id));
 
-        return profileMapper.toDTO(profile);
+        return profile;
     }
 
     public ProfileRequestDTO buscarPorUUID(UUID uuid){

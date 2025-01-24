@@ -25,12 +25,27 @@ public class TrainingSheetController {
         return ResponseEntity.ok(trainingSheetService.listar());
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar", description = "Buscar uma ficha de treino.")
+    public ResponseEntity<TrainingSheet> buscar(@PathVariable Integer id){
+        return ResponseEntity.ok(trainingSheetService.buscar(id));
+    }
+
     @PostMapping
     @Operation(summary = "Salvar", description = "Salvar uma ficha de treino.")
     public ResponseEntity<TrainingSheetDTO> salvar(
             @RequestBody TrainingSheetDTO trainingSheetDTO
     ){
         return ResponseEntity.ok(trainingSheetService.salvar(trainingSheetDTO));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Editar", description = "Editar uma ficha de treino.")
+    public ResponseEntity<TrainingSheetDTO> editar(
+            @PathVariable Integer id,
+            @RequestBody TrainingSheetDTO trainingSheetDTO
+    ){
+        return ResponseEntity.ok(trainingSheetService.editar(id, trainingSheetDTO));
     }
 
     @DeleteMapping("/{id}")

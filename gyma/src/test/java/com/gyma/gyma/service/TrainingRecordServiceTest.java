@@ -43,14 +43,11 @@ class TrainingRecordServiceTest {
 
     @Test
     void listarTodos() {
-        // Arrange
         TrainingRecord trainingRecord = new TrainingRecord();
         when(trainingRecordRepository.findAll()).thenReturn(List.of(trainingRecord));
 
-        // Act
         var result = trainingRecordService.listarTodos();
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(trainingRecordRepository, times(1)).findAll();
@@ -58,7 +55,7 @@ class TrainingRecordServiceTest {
 
     @Test
     void agendar() {
-        // Arrange
+
         Integer trainingTimeId = 1;
         UUID studentId = UUID.randomUUID();
         UUID trainerId = UUID.randomUUID();
@@ -79,14 +76,11 @@ class TrainingRecordServiceTest {
         when(trainingRecordRepository.save(any(TrainingRecord.class))).thenReturn(trainingRecord);
         when(trainingRecordMapper.toDTO(trainingRecord)).thenReturn(trainingRecordDTO);
 
-        // Act
         var result = trainingRecordService.agendar(trainingRecordDTO);
 
-        // Assert
         assertNotNull(result);
         assertEquals(trainingRecordDTO, result);
 
-        // Verificar se o método save foi chamado com o objeto esperado
         ArgumentCaptor<TrainingRecord> captor = ArgumentCaptor.forClass(TrainingRecord.class);
         verify(trainingRecordRepository, times(1)).save(captor.capture());
         TrainingRecord capturedTrainingRecord = captor.getValue();
@@ -98,7 +92,6 @@ class TrainingRecordServiceTest {
 
     @Test
     void agendarTrainingTimeNotFound() {
-        // Arrange
         Integer trainingTimeId = 1;
         UUID studentId = UUID.randomUUID();
         UUID trainerId = UUID.randomUUID();
@@ -106,7 +99,6 @@ class TrainingRecordServiceTest {
 
         when(trainingTimeRepository.findById(trainingTimeId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             trainingRecordService.agendar(trainingRecordDTO);
         });
@@ -116,7 +108,6 @@ class TrainingRecordServiceTest {
 
     @Test
     void agendarStudentNotFound() {
-        // Arrange
         Integer trainingTimeId = 1;
         UUID studentId = UUID.randomUUID();
         UUID trainerId = UUID.randomUUID();
@@ -126,7 +117,6 @@ class TrainingRecordServiceTest {
         when(trainingTimeRepository.findById(trainingTimeId)).thenReturn(Optional.of(trainingTime));
         when(profileRepository.findByKeycloakId(studentId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             trainingRecordService.agendar(trainingRecordDTO);
         });
@@ -136,7 +126,6 @@ class TrainingRecordServiceTest {
 
     @Test
     void agendarTrainerNotFound() {
-        // Arrange
         Integer trainingTimeId = 1;
         UUID studentId = UUID.randomUUID();
         UUID trainerId = UUID.randomUUID();
@@ -148,7 +137,6 @@ class TrainingRecordServiceTest {
         when(profileRepository.findByKeycloakId(studentId)).thenReturn(Optional.of(student));
         when(profileRepository.findByKeycloakId(trainerId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             trainingRecordService.agendar(trainingRecordDTO);
         });
@@ -158,13 +146,30 @@ class TrainingRecordServiceTest {
 
     @Test
     void deletar() {
-        // Arrange
         Integer id = 1;
 
-        // Act
+        TrainingRecord trainingRecord = new TrainingRecord();
+        when(trainingRecordRepository.findById(id)).thenReturn(Optional.of(trainingRecord));
+
         trainingRecordService.deletar(id);
 
-        // Assert
         verify(trainingRecordRepository, times(1)).deleteById(id);
     }
+
+    @Test
+    void deletarQuandoIdInvalido() {
+        Integer idInvalido = -5;
+
+        when(trainingRecordRepository.findById(idInvalido)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            trainingRecordService.deletar(idInvalido);
+        });
+
+        assertEquals("Registro de treino não encontrado.", exception.getMessage());
+
+        verify(trainingRecordRepository, never()).deleteById(idInvalido);
+    }
+
+
 }

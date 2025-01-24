@@ -43,3 +43,5 @@ public class Profile {
     )
     private Set<Role> roles = new HashSet<>();
 
+}
+

@@ -1,6 +1,7 @@
 package com.gyma.gyma.mappers;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
+import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
 import org.mapstruct.Mapper;
@@ -37,7 +38,7 @@ public interface TrainingTimeMapper {
     TrainingTime toEntity(TrainingTimeDTO trainingTimeDTO);
 
     void updateEntityFromDTO(
-            TrainingTimeDTO trainingTimeDTO,
+            TrainingTimeUpdateDTO trainingTimeDTO,
             @MappingTarget TrainingTime trainingTime
     );
 }

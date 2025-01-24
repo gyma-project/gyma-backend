@@ -1,11 +1,13 @@
 package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
+import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
+import com.gyma.gyma.model.enums.DayOfTheWeek;
 import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -70,10 +72,45 @@ public class TrainingTimeServiceTest {
                 .thenReturn(trainingTimePage);
 
         Page<TrainingTime> result = trainingTimeService.listarTodos(
-                LocalTime.of(9, 0),
-                LocalTime.of(10, 0),
-                20,
                 null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(result);
+        assertEquals(
+                1,
+                result.getTotalElements()
+        );
+        assertEquals(
+                trainingTime,
+                result.getContent().get(0)
+        );
+        verify(trainingTimeRepository).findAll(any(Specification.class), eq(pageRequest));
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista paginada de horários de treino")
+    public void returnAListOfTrainingTimesWithFilters() {
+        LocalTime horaFiltro = LocalTime.of(14, 0);
+        LocalTime horaFiltroDois = LocalTime.of(18, 0);
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<TrainingTime> trainingTimePage = new PageImpl<>(Collections.singletonList(trainingTime), pageRequest, 1);
+
+        when(trainingTimeRepository.findAll(any(Specification.class), any(PageRequest.class)))
+                .thenReturn(trainingTimePage);
+
+        Page<TrainingTime> result = trainingTimeService.listarTodos(
+                horaFiltro,
+                horaFiltroDois,
+                20,
+                "MONDAY",
                 UUID.randomUUID(),
                 true,
                 UUID.randomUUID(),
@@ -101,22 +138,11 @@ public class TrainingTimeServiceTest {
 
         when(trainingTimeRepository.findById(id)).thenReturn(Optional.of(trainingTime));
 
-        TrainingTimeDTO trainingTimeDTO = new TrainingTimeDTO(
-                20,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                true
-        );
-
-        when(trainingTimeMapper.toDTO(trainingTime)).thenReturn(trainingTimeDTO);
-
-        TrainingTimeDTO result = trainingTimeService.buscarPorId(id);
+        TrainingTime result = trainingTimeService.buscarPorId(id);
 
         assertNotNull(result, "O resultado não pode ser nulo.");
-        assertEquals(trainingTimeDTO, result, "O DTO retornado não é o esperado.");
-
+        assertEquals(trainingTime, result, "O horário de treino retornado deve ser igual ao esperado.");
         verify(trainingTimeRepository, times(1)).findById(id);
-        verify(trainingTimeMapper, times(1)).toDTO(trainingTime);
     }
 
     @Test
@@ -134,21 +160,20 @@ public class TrainingTimeServiceTest {
         Profile updater = new Profile();
         updater.setKeycloakId(UUID.randomUUID());
 
-        TrainingTimeDTO trainingTimeDTO = new TrainingTimeDTO(
-                20,
-                trainer.getKeycloakId(),
-                updater.getKeycloakId(),
-                true
-        );
+        TrainingTimeUpdateDTO trainingTimeDTO = new TrainingTimeUpdateDTO();
+        trainingTimeDTO.setActive(true);
+        trainingTimeDTO.setUpdateBy(updater.getKeycloakId());
+        trainingTimeDTO.setTrainerId(trainer.getKeycloakId());
+        trainingTimeDTO.setStudentsLimit(20);
 
         when(trainingTimeRepository.findById(1)).thenReturn(Optional.of(trainingTime));
         when(profileRepository.findByKeycloakId(trainer.getKeycloakId())).thenReturn(Optional.of(trainer));
         when(profileRepository.findByKeycloakId(updater.getKeycloakId())).thenReturn(Optional.of(updater));
         doAnswer(invocation -> {
-            TrainingTimeDTO dto = invocation.getArgument(0);
+            TrainingTimeUpdateDTO dto = invocation.getArgument(0);
             TrainingTime entity = invocation.getArgument(1);
-            entity.setStudentsLimit(dto.studentsLimit());
-            entity.setActive(dto.active());
+            entity.setStudentsLimit(dto.getStudentsLimit());
+            entity.setActive(dto.getActive());
             return null;
         }).when(trainingTimeMapper).updateEntityFromDTO(trainingTimeDTO, trainingTime);
         when(trainingTimeRepository.save(trainingTime)).thenReturn(trainingTime);
@@ -174,12 +199,17 @@ public class TrainingTimeServiceTest {
     @DisplayName("Deve lançar exceção quando horário de treino não for encontrado")
     public void shouldThrowExceptionWhenTrainingTimeNotFound() {
         Integer id = 1;
-        TrainingTimeDTO trainingTimeDTO = new TrainingTimeDTO(
-                20,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                true
-        );
+        Profile updater = new Profile();
+        updater.setKeycloakId(UUID.randomUUID());
+
+        Profile trainer = new Profile();
+        trainer.setKeycloakId(UUID.randomUUID());
+
+        TrainingTimeUpdateDTO trainingTimeDTO = new TrainingTimeUpdateDTO();
+        trainingTimeDTO.setActive(true);
+        trainingTimeDTO.setUpdateBy(updater.getKeycloakId());
+        trainingTimeDTO.setTrainerId(trainer.getKeycloakId());
+        trainingTimeDTO.setStudentsLimit(20);
 
         when(trainingTimeRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -197,13 +227,18 @@ public class TrainingTimeServiceTest {
     public void shouldThrowExceptionWhenTrainerNotFound() {
         Integer id = 1;
         UUID trainerId = UUID.randomUUID();
+
+        Profile updater = new Profile();
+        updater.setKeycloakId(UUID.randomUUID());
+
+        TrainingTimeUpdateDTO trainingTimeDTO = new TrainingTimeUpdateDTO();
+        trainingTimeDTO.setActive(true);
+        trainingTimeDTO.setUpdateBy(updater.getKeycloakId());
+        trainingTimeDTO.setTrainerId(trainerId);
+        trainingTimeDTO.setStudentsLimit(20);
+
         TrainingTime trainingTime = new TrainingTime();
-        TrainingTimeDTO trainingTimeDTO = new TrainingTimeDTO(
-                20,
-                trainerId,
-                UUID.randomUUID(),
-                true
-        );
+        trainingTime.setId(id);
 
         when(trainingTimeRepository.findById(id)).thenReturn(Optional.of(trainingTime));
         when(profileRepository.findByKeycloakId(trainerId)).thenReturn(Optional.empty());
@@ -222,19 +257,24 @@ public class TrainingTimeServiceTest {
     @DisplayName("Deve lançar exceção quando usuário de atualização não for encontrado")
     public void shouldThrowExceptionWhenUpdateUserNotFound() {
         Integer id = 1;
-        UUID trainerId = UUID.randomUUID();
-        UUID updaterId = UUID.randomUUID();
+        Profile trainer = new Profile();
+        trainer.setKeycloakId(UUID.randomUUID());
+
+        Profile updater = new Profile();
+        updater.setKeycloakId(UUID.randomUUID());
+
+        TrainingTimeUpdateDTO trainingTimeDTO = new TrainingTimeUpdateDTO();
+        trainingTimeDTO.setActive(true);
+        trainingTimeDTO.setUpdateBy(updater.getKeycloakId());
+        trainingTimeDTO.setTrainerId(trainer.getKeycloakId());
+        trainingTimeDTO.setStudentsLimit(20);
+
         TrainingTime trainingTime = new TrainingTime();
-        TrainingTimeDTO trainingTimeDTO = new TrainingTimeDTO(
-                20,
-                trainerId,
-                updaterId,
-                true
-        );
+        trainingTime.setId(id);
 
         when(trainingTimeRepository.findById(id)).thenReturn(Optional.of(trainingTime));
-        when(profileRepository.findByKeycloakId(trainerId)).thenReturn(Optional.of(new Profile()));
-        when(profileRepository.findByKeycloakId(updaterId)).thenReturn(Optional.empty());
+        when(profileRepository.findByKeycloakId(trainer.getKeycloakId())).thenReturn(Optional.of(new Profile()));
+        when(profileRepository.findByKeycloakId(updater.getKeycloakId())).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -243,8 +283,8 @@ public class TrainingTimeServiceTest {
 
         assertEquals("Usuário de atualização não encontrado.", exception.getMessage());
         verify(trainingTimeRepository).findById(id);
-        verify(profileRepository).findByKeycloakId(trainerId);
-        verify(profileRepository).findByKeycloakId(updaterId);
+        verify(profileRepository).findByKeycloakId(trainer.getKeycloakId());
+        verify(profileRepository).findByKeycloakId(updater.getKeycloakId());
     }
 
 

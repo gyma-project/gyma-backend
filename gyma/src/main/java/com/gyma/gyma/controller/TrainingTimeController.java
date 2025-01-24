@@ -1,10 +1,12 @@
 package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.TrainingTimeDTO;
+import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.service.TrainingTimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -55,9 +57,8 @@ public class TrainingTimeController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping("/{id}")
     @Operation(summary = "Buscar por ID", description = "Buscar por ID horário de treino.")
-    public ResponseEntity<TrainingTimeDTO> getTrainingTimeById(@PathVariable Integer id) {
-        TrainingTimeDTO trainingTime = trainingTimeService.buscarPorId(id);
-        return ResponseEntity.ok(trainingTime);
+    public ResponseEntity<TrainingTime> getTrainingTimeById(@PathVariable Integer id) {
+        return ResponseEntity.ok(trainingTimeService.buscarPorId(id));
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
@@ -65,7 +66,7 @@ public class TrainingTimeController {
     @Operation(summary = "Editar", description = "Editar parcialmente horário de treino.")
     public ResponseEntity<TrainingTime> editarParcialmente(
             @PathVariable Integer id,
-            @RequestBody TrainingTimeDTO trainingTimeDTO
+            @RequestBody @Valid TrainingTimeUpdateDTO trainingTimeDTO
     ){
         TrainingTime trainingTime = trainingTimeService.editar(id, trainingTimeDTO);
         return ResponseEntity.ok(trainingTime);
