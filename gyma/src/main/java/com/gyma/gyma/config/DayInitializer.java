@@ -2,10 +2,12 @@ package com.gyma.gyma.config;
 
 import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.Profile;
+import com.gyma.gyma.model.Role;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
+import com.gyma.gyma.repository.RoleRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class DayInitializer {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @PostConstruct
     @Async
     public void initializeDays() {
@@ -34,6 +39,7 @@ public class DayInitializer {
         if (dayRepository.count() == 0) {
             Profile defaultTrainer = profileRepository.
                     findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
+            createRolesIfNotExist();
             for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
                 Day day = new Day();
                 day.setName(dayOfTheWeek);
@@ -57,6 +63,26 @@ public class DayInitializer {
         profile.setKeycloakId(UUID.randomUUID());
         profileRepository.save(profile);
         return profile;
+    }
+
+    private void createRolesIfNotExist() {
+        if (roleRepository.count() == 0) {
+            Role adminRole = new Role();
+            adminRole.setName("ADMIN");
+            roleRepository.save(adminRole);
+
+            Role trainerRole = new Role();
+            trainerRole.setName("TRAINER");
+            roleRepository.save(trainerRole);
+
+            Role studentRole = new Role();
+            studentRole.setName("STUDENT");
+            roleRepository.save(studentRole);
+
+            System.out.println("As roles foram criadas!");
+        } else {
+            System.out.println("As roles já existem, pulando esta etapa...");
+        }
     }
 
     private void createTrainingTimesForDay(Day day, Profile defaultTrainer) {

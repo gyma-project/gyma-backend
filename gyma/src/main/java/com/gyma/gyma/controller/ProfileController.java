@@ -24,10 +24,11 @@ public class ProfileController {
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) UUID keycloakId,
+            @RequestParam(required = false) String roles,
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer size
     ) {
-        return profileService.listarTodos(username, email, firstName, lastName, keycloakId, pageNumber, size);
+        return profileService.listarTodos(username, email, firstName, lastName, keycloakId, roles, pageNumber, size);
     }
 
     @GetMapping("/{id}")

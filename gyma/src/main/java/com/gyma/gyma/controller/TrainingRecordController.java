@@ -29,6 +29,12 @@ public class TrainingRecordController {
         return new ResponseEntity<>(criado, HttpStatus.CREATED);
     }
 
+    @GetMapping("/relatorio")
+    @Operation(summary = "Gerar relatório", description = "Criar um relatório.")
+    public String criarRelatorio() {
+        return trainingRecordService.criarRelatorio();
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @Operation(summary = "Listar", description = "Listar todos agendamentos.")

@@ -3,6 +3,8 @@ package com.gyma.gyma.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,6 +35,11 @@ public class Profile {
     @Column(name = "keycloak_user_id", nullable = false, length = 255)
     private UUID keycloakId;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "profile_roles",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-
-}

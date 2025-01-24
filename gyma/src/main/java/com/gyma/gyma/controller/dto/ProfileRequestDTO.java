@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Set;
 import java.util.UUID;
 
 public record ProfileRequestDTO(
@@ -21,7 +22,10 @@ public record ProfileRequestDTO(
         String lastName,
 
         @NotNull(message = "O ID do Keycloak é obrigatório.")
-        UUID keycloakUserId
+        UUID keycloakUserId,
+
+        @NotBlank(message="Papéis não podem ser vazio.")
+        Set<Integer> roleIds
 ) {
 
 }

@@ -54,4 +54,16 @@ public class ProfileSpecification {
         };
     }
 
+    public static Specification<Profile> byRole(String roleName) {
+        return (root, query, builder) -> {
+            if (ObjectUtils.isEmpty(roleName)) {
+                return null;
+            }
+            // Faz um join na tabela de roles e filtra pelo nome
+            return builder.equal(
+                    root.join("roles").get("name"), roleName
+            );
+        };
+    }
+
 }
