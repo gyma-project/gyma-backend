@@ -18,16 +18,16 @@ public record TrainingTimeDTO(
         UUID trainerId,
 
         @NotNull(message = "ID do usuário não pode ser nulo.")
-        UUID idUsuario,
+        UUID updateBy,
 
         @NotNull(message = "O campo 'active' não pode ser nulo.")
         Boolean active
 ) {
 
-    public TrainingTime mapearParaTraining(Profile trainer){
+    public TrainingTime mapearParaTraining(Profile trainer, Profile updateBy){
         TrainingTime training = new TrainingTime();
         training.setStudentsLimit(this.studentsLimit);
-        training.setIdUsuario(this.idUsuario);
+        training.setUpdateBy(updateBy);
         training.setTrainer(trainer);
         training.setActive(this.active);
         return training;
