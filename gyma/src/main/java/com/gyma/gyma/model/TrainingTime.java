@@ -2,8 +2,7 @@ package com.gyma.gyma.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,6 +18,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrainingTime {
 
     @Id
@@ -54,7 +55,8 @@ public class TrainingTime {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false)
-    private UUID idUsuario;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 
 }

@@ -1,8 +1,7 @@
 package com.gyma.gyma.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -10,6 +9,9 @@ import java.util.UUID;
 @Table(name = "profiles", schema = "public")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Profile {
 
     @Id
@@ -30,5 +32,7 @@ public class Profile {
 
     @Column(name = "keycloak_user_id", nullable = false, length = 255)
     private UUID keycloakId;
+
+
 
 }
