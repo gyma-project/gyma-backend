@@ -22,8 +22,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: List files
+        run: ls -R
+
       - name: Build with Maven
+        working-directory: ./gyma
         run: mvn clean install -DskipTests
 
       - name: Run tests
+        working-directory: ./gyma
         run: mvn test
