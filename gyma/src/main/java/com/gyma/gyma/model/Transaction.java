@@ -1,5 +1,6 @@
 package com.gyma.gyma.model;
 
+import com.gyma.gyma.model.enums.CategoryTransaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,14 +28,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sender_id")
-    private Profile sender;
-
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "description", length = 255)
+    @Column(name = "description")
     private String description;
 
     @CreatedDate
@@ -52,5 +49,9 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by", nullable = false)
     private Profile createdBy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private CategoryTransaction category;
 
 }

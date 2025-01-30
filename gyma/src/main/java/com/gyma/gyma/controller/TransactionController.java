@@ -2,6 +2,7 @@ package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.TransactionDTO;
 import com.gyma.gyma.model.Transaction;
+import com.gyma.gyma.model.enums.CategoryTransaction;
 import com.gyma.gyma.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,24 +37,24 @@ public class TransactionController {
             description = "Retorna uma lista de todas as transações financeiras."
     )
     public Page<Transaction> getAllTransactions(
-            @RequestParam(required = false) UUID senderId,
             @RequestParam(required = false) UUID createdById,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate updateAt,
+            @RequestParam(required = false) CategoryTransaction category,
             @RequestParam(defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
         return transactionService.getAllTransactions(
-                senderId,
                 createdById,
                 minPrice,
                 maxPrice,
                 description,
                 startDate,
                 updateAt,
+                category,
                 pageNumber,
                 size
                 );

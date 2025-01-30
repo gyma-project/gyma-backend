@@ -10,8 +10,6 @@ import java.util.UUID;
 
 @Schema(description = "DTO para transações financeiras.")
 public record TransactionDTO(
-        @Schema(description = "UUID do perfil que enviou a transação", example = "10")
-        UUID senderId,
 
         @NotNull(message = "O ID do criador (createdById) é obrigatório.")
         @Schema(description = "ID do perfil que criou a transação", example = "2")
@@ -27,5 +25,9 @@ public record TransactionDTO(
 
         @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres.")
         @Schema(description = "Descrição opcional da transação", example = "Mensalidade da academia")
-        String description
+        String description,
+
+        @NotNull(message = "A categoria da transação é obrigatória.")
+        @Schema(description = "Categoria da transação", example = "MEMBERSHIP")
+        String category
 ) {}

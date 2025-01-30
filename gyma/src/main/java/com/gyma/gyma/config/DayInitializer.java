@@ -61,6 +61,7 @@ public class DayInitializer {
         profile.setLastName("Padrão");
         profile.setEmail("default@gyma.com");
         profile.setKeycloakId(UUID.randomUUID());
+        profile.setActive(true);
         profileRepository.save(profile);
         return profile;
     }
