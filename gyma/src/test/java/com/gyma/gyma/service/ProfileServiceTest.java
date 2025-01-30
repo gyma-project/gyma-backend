@@ -2,6 +2,7 @@ package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.specificiations.ProfileSpecification;
+import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.repository.ProfileRepository;
@@ -146,8 +147,8 @@ class ProfileServiceTest {
     void testDeletar_NotFound() {
         when(profileRepository.findById(1)).thenReturn(Optional.empty());
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
                 () -> profileService.deletar(1)
         );
 
