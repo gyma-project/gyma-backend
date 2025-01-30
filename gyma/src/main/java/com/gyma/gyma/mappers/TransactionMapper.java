@@ -25,12 +25,10 @@ public interface TransactionMapper {
         return profile;
     }
 
-    @Mapping(source = "sender.keycloakId", target = "senderId")
     @Mapping(source = "createdBy.keycloakId", target = "createdById")
     @Mapping(source = "updateBy.keycloakId", target = "updateById")
     TransactionDTO toDTO(Transaction transaction);
 
-    @Mapping(source = "senderId", target = "sender")
     @Mapping(source = "createdById", target = "createdBy")
     @Mapping(source = "updateById", target = "updateBy")
     Transaction toEntity(TransactionDTO dto);

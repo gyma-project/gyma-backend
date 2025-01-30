@@ -1,6 +1,7 @@
 package com.gyma.gyma.controller.specificiations;
 
 import com.gyma.gyma.model.Transaction;
+import com.gyma.gyma.model.enums.CategoryTransaction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
@@ -10,15 +11,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class TransactionSpecification {
-
-    public static Specification<Transaction> bySenderId(UUID senderId) {
-        return (root, query, builder) -> {
-            if (ObjectUtils.isEmpty(senderId)) {
-                return null;
-            }
-            return builder.equal(root.get("sender").get("keycloakId"), senderId);
-        };
-    }
 
     public static Specification<Transaction> byCreatedById(UUID createdById) {
         return (root, query, builder) -> {
@@ -80,6 +72,15 @@ public class TransactionSpecification {
                 return null;
             }
             return builder.equal(root.get("updateBy").get("keycloakId"), updateById);
+        };
+    }
+
+    public static Specification<Transaction> byCategory(CategoryTransaction category) {
+        return (root, query, builder) -> {
+            if (ObjectUtils.isEmpty(category)) {
+                return null;
+            }
+            return builder.equal(root.get("category"), category); // Comparando com o campo 'category'
         };
     }
 }

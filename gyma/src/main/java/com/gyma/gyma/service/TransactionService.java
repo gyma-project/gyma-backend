@@ -6,6 +6,7 @@ import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.TransactionMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Transaction;
+import com.gyma.gyma.model.enums.CategoryTransaction;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,6 @@ public class TransactionService {
     public Transaction create(TransactionDTO transactionDTO){
         Transaction transaction = transactionMapper.toEntity(transactionDTO);
 
-        Profile sender = profileRepository.findByKeycloakId(transactionDTO.senderId())
-                .orElseThrow(() -> new ResourceNotFoundException("Pagador não encontrado por UUID."));
-
         Profile createdBy = profileRepository.findByKeycloakId(transactionDTO.createdById())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Perfil que criou transação não encontrado por UUID."
@@ -48,7 +46,6 @@ public class TransactionService {
                         "Perfil que tentou atualizar não foi encontrado por UUID."
                 ));
 
-        transaction.setSender(sender);
         transaction.setCreatedBy(createdBy);
         transaction.setUpdateBy(updateBy);
 
@@ -56,13 +53,13 @@ public class TransactionService {
     }
 
     public Page<Transaction> getAllTransactions(
-            UUID senderId,
             UUID createdById,
             BigDecimal minPrice,
             BigDecimal maxPrice,
             String description,
             LocalDate startDate,
             LocalDate updateAt,
+            CategoryTransaction category,
             Integer pageNumber,
             Integer size
     ){
@@ -77,7 +74,7 @@ public class TransactionService {
         Pageable page = PageRequest.of(pageNumber, size);
 
         Specification<Transaction> spec = Specification.where(
-                TransactionSpecification.bySenderId(senderId)
+                TransactionSpecification.byCategory(category)
                 .and(TransactionSpecification.byCreatedById(createdById))
                 .and(TransactionSpecification.byPriceLessThan(maxPrice))
                 .and(TransactionSpecification.byPriceGreaterThan(minPrice))
@@ -89,9 +86,7 @@ public class TransactionService {
         return transactionRepository.findAll(spec, page);
     }
 
-    public Transaction getTransactionById(
-            Integer id
-    ){
+    public Transaction getTransactionById(Integer id){
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado pelo id: " + id));
     }
