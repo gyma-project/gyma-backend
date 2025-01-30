@@ -50,14 +50,19 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.criar(profileRequestDTO));
     }
 
-   // @PutMapping("/{id}")
-   // public ResponseEntity<ProfileRequestDTO> atualizar(
-   //         @PathVariable Integer id,
-   //         @Validated @RequestBody ProfileRequestDTO profileRequestDTO
-   // ) {
-   //     Profile profile = profileService.atualizar(id, profileRequestDTO);
-  //      return ResponseEntity.ok(profileService.toDTO(profile));
-   // }
+    @PutMapping("/{id}")
+    public ResponseEntity<Profile> atualizar(
+            @PathVariable Integer id,
+            @RequestBody ProfileRequestDTO profileRequestDTO
+    ) {
+        return ResponseEntity.ok(profileService.atualizar(id, profileRequestDTO));
+    }
+
+    @PostMapping("/{id}/toggle-active")
+    @Operation(summary = "Alternar status ativo", description = "Alterna o status ativo de um perfil.")
+    public ResponseEntity<Profile> toggleActive(@PathVariable Integer id){
+        return ResponseEntity.ok(profileService.toggleActive(id));
+    }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar", description = "Deletar um perfil.")

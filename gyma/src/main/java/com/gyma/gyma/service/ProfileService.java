@@ -2,6 +2,7 @@ package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.specificiations.ProfileSpecification;
+import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
@@ -53,12 +54,13 @@ public class ProfileService {
         Pageable page = PageRequest.of(pageNumber, size);
 
         Specification<Profile> spec = Specification.where(
-                        ProfileSpecification.byUsername(username))
+                ProfileSpecification.byUsername(username)
                 .and(ProfileSpecification.byEmail(email))
                 .and(ProfileSpecification.byKeycloakId(keycloakID))
                 .and(ProfileSpecification.byFirstName(firstName))
-                .and(ProfileSpecification.byLastName(lastName)
-                .and(ProfileSpecification.byRole(role)));
+                .and(ProfileSpecification.byLastName(lastName))
+                .and(ProfileSpecification.byRole(role))
+        );
 
         return profileRepository.findAll(spec, page);
     }
@@ -96,18 +98,19 @@ public class ProfileService {
         return profileMapper.toDTO(profile);
     }
 
-    //public Profile atualizar(Integer id, ProfileRequestDTO profileRequestDTO) {
-        //Profile profile = buscarPorId(id);
-        //profile.setUsername(profileRequestDTO.username());
-        //profile.setEmail(profileRequestDTO.email());
-        //profile.setKeycloakId(profileRequestDTO.keycloakUserId());
-        //return profileRepository.save(profile);
-    //}
+    public Profile atualizar(Integer id, ProfileRequestDTO profileRequestDTO) {
+        Profile profile = buscarPorId(id);
+        profile.setUsername(profileRequestDTO.username());
+        profile.setEmail(profileRequestDTO.email());
+        profile.setKeycloakId(profileRequestDTO.keycloakUserId());
+        return profileRepository.save(profile);
+    }
 
     public void deletar(Integer id) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado para o ID: " + id));
-
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Perfil não encontrado para o ID: " + id
+                ));
         profileRepository.delete(profile);
     }
 
@@ -129,4 +132,15 @@ public class ProfileService {
                 .collect(Collectors.toSet());
     }
 
+    public Profile toggleActive(Integer id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado para o ID: " + id));
+
+        if(!profile.getActive()){
+            profile.setActive(true);
+        } else {
+            profile.setActive(false);
+        }
+        return profileRepository.save(profile);
+    }
 }
