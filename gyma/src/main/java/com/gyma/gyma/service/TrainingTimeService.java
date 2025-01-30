@@ -103,4 +103,16 @@ public class TrainingTimeService {
         return trainingTimeRepository.save(trainingTime);
     }
 
+    public TrainingTime toggleActive(Integer id) {
+        TrainingTime trainingTime = trainingTimeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Horário de treino não encontrado."));
+
+        if(!trainingTime.getActive()){
+            trainingTime.setActive(true);
+        } else {
+            trainingTime.setActive(false);
+        }
+
+        return trainingTimeRepository.save(trainingTime);
+    }
 }

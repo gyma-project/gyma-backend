@@ -62,6 +62,16 @@ public class TrainingTimeController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PostMapping("/{id}/toggle-active")
+    @Operation(
+            summary = "Alterar status do horário",
+            description = "Buscar por ID horário de treino."
+    )
+    public ResponseEntity<TrainingTime> toggleActive(@PathVariable Integer id) {
+        return ResponseEntity.ok(trainingTimeService.toggleActive(id));
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PatchMapping("/{id}")
     @Operation(summary = "Editar", description = "Editar parcialmente horário de treino.")
     public ResponseEntity<TrainingTime> editarParcialmente(

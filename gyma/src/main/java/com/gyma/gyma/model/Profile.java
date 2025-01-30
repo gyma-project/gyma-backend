@@ -35,6 +35,9 @@ public class Profile {
     @Column(name = "keycloak_user_id", nullable = false, length = 255)
     private UUID keycloakId;
 
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+    private Boolean active;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "profile_roles",
