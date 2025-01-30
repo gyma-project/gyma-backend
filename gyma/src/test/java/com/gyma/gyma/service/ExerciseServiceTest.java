@@ -13,6 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -110,10 +115,27 @@ class ExerciseServiceTest {
         exercise.setMuscleGroup(MuscleGroup.CHEST);
         exercise.setRepetition(3);
 
-        when(exerciseRepository.findAll()).thenReturn(List.of(exercise));
-        List<Exercise> result = exerciseService.listar();
+        List<Exercise> exercises = List.of(exercise);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Exercise> exercisePage = new PageImpl<>(exercises, pageable, exercises.size());
+
+        when(exerciseRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(exercisePage);
+
+        Page<Exercise> result = exerciseService.listar(
+                MuscleGroup.CHEST,
+                "Supino",
+                10,
+                3,
+                0,
+                10
+        );
+
         assertNotNull(result);
         assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
+        assertEquals(1, result.getTotalElements());
+        assertEquals(exercise.getName(), result.getContent().get(0).getName());
     }
+
 }

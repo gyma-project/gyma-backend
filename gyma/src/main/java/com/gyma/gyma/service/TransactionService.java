@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -60,8 +61,8 @@ public class TransactionService {
             BigDecimal minPrice,
             BigDecimal maxPrice,
             String description,
-            LocalDateTime startDate,
-            LocalDateTime updateAt,
+            LocalDate startDate,
+            LocalDate updateAt,
             Integer pageNumber,
             Integer size
     ){
