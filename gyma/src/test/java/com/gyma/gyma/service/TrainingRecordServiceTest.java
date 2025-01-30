@@ -15,7 +15,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,13 +49,30 @@ class TrainingRecordServiceTest {
     @Test
     void listarTodos() {
         TrainingRecord trainingRecord = new TrainingRecord();
-        when(trainingRecordRepository.findAll()).thenReturn(List.of(trainingRecord));
 
-        var result = trainingRecordService.listarTodos();
+        Integer trainingTimeId = 1;
+        UUID studentId = UUID.randomUUID();
+        UUID trainerId = UUID.randomUUID();
+        LocalDate createdAt = LocalDate.of(2024, 1, 29);
+        LocalDate updatedAt = LocalDate.of(2024, 1, 30);
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 1, 31);
+        Integer pageNumber = 0;
+        Integer size = 10;
+
+        Page<TrainingRecord> page = new PageImpl<>(List.of(trainingRecord), PageRequest.of(pageNumber, size), 1);
+        when(trainingRecordRepository.findAll(any(Specification.class), any(PageRequest.class)))
+                .thenReturn(page);
+
+        var result = trainingRecordService.listarTodos(
+                trainingTimeId, studentId, trainerId, createdAt, updatedAt, startDate, endDate, pageNumber, size
+        );
 
         assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(trainingRecordRepository, times(1)).findAll();
+        assertEquals(1, result.getTotalElements());
+
+        verify(trainingRecordRepository, times(1)).
+                findAll(any(Specification.class), any(PageRequest.class));
     }
 
     @Test

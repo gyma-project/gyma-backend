@@ -5,6 +5,7 @@ import com.gyma.gyma.model.TrainingRecord;
 import com.gyma.gyma.model.TrainingTime;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,8 +23,8 @@ class TrainingRecordTest {
         record.setTrainingTime(trainingTime);
         record.setStudent(student);
         record.setTrainer(trainer);
-        record.setCreatedAt(LocalDateTime.now());
-        record.setUpdateAt(LocalDateTime.now());
+        record.setCreatedAt(LocalDate.now());
+        record.setUpdateAt(LocalDate.now());
 
         assertEquals(1, record.getId());
         assertEquals(trainingTime, record.getTrainingTime());

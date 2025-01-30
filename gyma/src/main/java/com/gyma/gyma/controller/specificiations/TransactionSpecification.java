@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class TransactionSpecification {
         };
     }
 
-    public static Specification<Transaction> byCreatedAt(LocalDateTime createdAt) {
+    public static Specification<Transaction> byCreatedAt(LocalDate createdAt) {
         return (root, query, builder) -> {
             if (ObjectUtils.isEmpty(createdAt)) {
                 return null;
@@ -64,7 +65,7 @@ public class TransactionSpecification {
         };
     }
 
-    public static Specification<Transaction> byUpdatedAt(LocalDateTime updatedAt) {
+    public static Specification<Transaction> byUpdatedAt(LocalDate updatedAt) {
         return (root, query, builder) -> {
             if (ObjectUtils.isEmpty(updatedAt)) {
                 return null;

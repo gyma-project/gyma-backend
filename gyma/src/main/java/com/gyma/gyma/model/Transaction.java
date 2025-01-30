@@ -10,7 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name="transactions", schema = "public")
@@ -38,11 +39,11 @@ public class Transaction {
 
     @CreatedDate
     @Column(name="created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @LastModifiedDate
     @Column(name="updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "update_by", nullable = false)
