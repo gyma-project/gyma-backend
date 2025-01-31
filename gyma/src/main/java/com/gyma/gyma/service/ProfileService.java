@@ -4,16 +4,21 @@ import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.controller.specificiations.ProfileSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
+import com.gyma.gyma.model.Image;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
+import com.gyma.gyma.repository.ImageRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.RoleRepository;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.HashSet;
@@ -33,6 +38,12 @@ public class ProfileService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private MinioClient minioClient;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     public Page<Profile> listarTodos(
             String username,
@@ -142,5 +153,32 @@ public class ProfileService {
             profile.setActive(false);
         }
         return profileRepository.save(profile);
+    }
+
+    public void updateProfileImage(
+            Integer id,
+            MultipartFile file
+    ) throws Exception {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado para o ID: " + id));
+
+        var inputStream = file.getInputStream();
+        var objectId = UUID.randomUUID().toString();
+
+        minioClient.putObject(
+                PutObjectArgs.builder()
+                        .bucket("images")
+                        .object(objectId)
+                        .stream(inputStream, inputStream.available(), -1)
+                        .contentType(file.getContentType())
+                        .build()
+        );
+
+        Image image = new Image();
+        image.setIdObject(objectId);
+        imageRepository.save(image);
+
+        profile.setImage(image);
+        profileRepository.save(profile);
     }
 }
