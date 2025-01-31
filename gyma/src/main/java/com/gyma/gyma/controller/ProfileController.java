@@ -1,15 +1,22 @@
 package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
+import com.gyma.gyma.model.Image;
 import com.gyma.gyma.model.Profile;
+import com.gyma.gyma.repository.ImageRepository;
 import com.gyma.gyma.service.ProfileService;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @RestController
@@ -20,6 +27,11 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    private MinioClient minioClient;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     @GetMapping
     @Operation(summary = "Listar", description = "Listar todos os perfis.")
@@ -70,4 +82,14 @@ public class ProfileController {
         profileService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/images")
+    @Operation(summary = "Alterar foto", description = "Alterar a foto de um perfil.")
+    public void updateImage(
+            @PathVariable Integer id,
+            @RequestParam MultipartFile file
+    ) throws Exception {
+        profileService.updateProfileImage(id, file);
+    }
+
 }

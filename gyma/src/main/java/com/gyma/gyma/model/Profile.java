@@ -46,5 +46,9 @@ public class Profile {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
 }
 
