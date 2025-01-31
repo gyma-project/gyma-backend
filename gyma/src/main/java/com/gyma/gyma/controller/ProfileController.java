@@ -1,16 +1,22 @@
 package com.gyma.gyma.controller;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
+import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.model.Image;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.repository.ImageRepository;
 import com.gyma.gyma.service.ProfileService;
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.errors.MinioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,6 +96,14 @@ public class ProfileController {
             @RequestParam MultipartFile file
     ) throws Exception {
         profileService.updateProfileImage(id, file);
+    }
+
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> downloadImage(@PathVariable String id) throws Exception{
+        byte[] imageBytes = profileService.downloadImage(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(imageBytes);
     }
 
 }

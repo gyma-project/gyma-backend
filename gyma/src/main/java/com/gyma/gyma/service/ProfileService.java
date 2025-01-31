@@ -10,8 +10,10 @@ import com.gyma.gyma.model.Role;
 import com.gyma.gyma.repository.ImageRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.RoleRepository;
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -180,5 +183,16 @@ public class ProfileService {
 
         profile.setImage(image);
         profileRepository.save(profile);
+    }
+
+    public byte[] downloadImage(String objectName) throws Exception {
+        InputStream inputStream = minioClient.getObject(
+                GetObjectArgs.builder()
+                        .bucket("images")
+                        .object(objectName)
+                        .build()
+        );
+
+        return IOUtils.toByteArray(inputStream);
     }
 }
