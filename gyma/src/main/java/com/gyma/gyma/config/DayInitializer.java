@@ -1,6 +1,5 @@
 package com.gyma.gyma.config;
 
-import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
 import com.gyma.gyma.model.TrainingTime;
@@ -36,17 +35,13 @@ public class DayInitializer {
     @Async
     public void initializeDays() {
         // Verifica se os registros já existem no banco
-        if (dayRepository.count() == 0) {
-            Profile defaultTrainer = profileRepository.
-                    findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
+        if (trainingTimeRepository.count() == 0) { // Alteramos para verificar TrainingTime
+            Profile defaultTrainer = profileRepository
+                    .findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
             createRolesIfNotExist();
             for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
-                Day day = new Day();
-                day.setName(dayOfTheWeek);
-                day.setActive(true);
-                dayRepository.save(day);
-
-                createTrainingTimesForDay(day, defaultTrainer);
+                // Criamos os horários diretamente usando DayOfTheWeek
+                createTrainingTimesForDay(dayOfTheWeek, defaultTrainer);
             }
             System.out.println("Os dias e horários foram criados!");
         } else {
@@ -86,7 +81,7 @@ public class DayInitializer {
         }
     }
 
-    private void createTrainingTimesForDay(Day day, Profile defaultTrainer) {
+    private void createTrainingTimesForDay(DayOfTheWeek day, Profile defaultTrainer) {
         int startHour = 5;
         int endHour = 23;
 
@@ -95,6 +90,7 @@ public class DayInitializer {
             LocalTime endTime = startTime.plusHours(1);
 
             TrainingTime trainingTime = new TrainingTime();
+            trainingTime.setDay(day);
             trainingTime.setStartTime(startTime);
             trainingTime.setEndTime(endTime);
             trainingTime.setStudentsLimit(20);
@@ -102,10 +98,7 @@ public class DayInitializer {
             trainingTime.setActive(true);
             trainingTime.setUpdateBy(defaultTrainer);
 
-            day.getTrainingTimes().add(trainingTime);
-
             trainingTimeRepository.save(trainingTime);
         }
-        dayRepository.save(day);
     }
 }

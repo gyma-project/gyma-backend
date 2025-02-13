@@ -1,6 +1,7 @@
 package com.gyma.gyma.controller.specificiations;
 
 import com.gyma.gyma.model.TrainingTime;
+import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
@@ -51,8 +52,12 @@ public class TrainingTimeSpecification {
             if (ObjectUtils.isEmpty(dayName)) {
                 return null;
             }
-            Join<Object, Object> daysJoin = root.join("day", JoinType.INNER);
-            return builder.like(builder.lower(daysJoin.get("name")), "%" + dayName.toLowerCase() + "%");
+            try {
+                DayOfTheWeek dayEnum = DayOfTheWeek.valueOf(dayName.toUpperCase());
+                return builder.isMember(dayEnum, root.get("days"));
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         };
     }
 

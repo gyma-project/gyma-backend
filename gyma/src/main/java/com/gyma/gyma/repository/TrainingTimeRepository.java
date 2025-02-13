@@ -1,8 +1,6 @@
 package com.gyma.gyma.repository;
 
 
-import com.gyma.gyma.model.Day;
-import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

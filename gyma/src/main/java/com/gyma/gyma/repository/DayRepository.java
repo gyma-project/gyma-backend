@@ -1,6 +1,5 @@
 package com.gyma.gyma.repository;
 
-import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
