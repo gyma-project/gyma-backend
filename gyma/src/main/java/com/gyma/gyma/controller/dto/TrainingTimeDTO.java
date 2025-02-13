@@ -1,7 +1,9 @@
 package com.gyma.gyma.controller.dto;
 
+import com.google.common.xml.XmlEscapers;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
+import com.gyma.gyma.model.enums.DayOfTheWeek;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -21,16 +23,9 @@ public record TrainingTimeDTO(
         UUID updateBy,
 
         @NotNull(message = "O campo 'active' não pode ser nulo.")
-        Boolean active
+        Boolean active,
+
+        @NotNull(message="O campo 'dayWeek' não pode ser nulo.")
+        DayOfTheWeek dayWeek
 ) {
-
-    public TrainingTime mapearParaTraining(Profile trainer, Profile updateBy){
-        TrainingTime training = new TrainingTime();
-        training.setStudentsLimit(this.studentsLimit);
-        training.setUpdateBy(updateBy);
-        training.setTrainer(trainer);
-        training.setActive(this.active);
-        return training;
-    }
-
 }

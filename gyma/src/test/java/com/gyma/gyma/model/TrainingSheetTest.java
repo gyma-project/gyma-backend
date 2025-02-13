@@ -1,8 +1,5 @@
-package com.gyma.gyma.model.tests;
+package com.gyma.gyma.model;
 
-import com.gyma.gyma.model.Exercise;
-import com.gyma.gyma.model.Profile;
-import com.gyma.gyma.model.TrainingSheet;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,5 @@
 package com.gyma.gyma.service;
 
-import com.gyma.gyma.controller.dto.ProfileRequestDTO;
-import com.gyma.gyma.controller.dto.TrainingTimeDTO;
 import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.controller.specificiations.TrainingTimeSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
@@ -9,7 +7,6 @@ import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
-import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,9 +27,6 @@ public class TrainingTimeService {
 
     @Autowired
     private TrainingTimeMapper trainingTimeMapper;
-
-    @Autowired
-    private DayRepository dayRepository;
 
     @Autowired
     private ProfileService profileService;

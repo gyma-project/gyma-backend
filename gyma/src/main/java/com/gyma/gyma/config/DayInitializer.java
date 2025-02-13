@@ -1,11 +1,9 @@
 package com.gyma.gyma.config;
 
-import com.gyma.gyma.model.Day;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
-import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.RoleRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -21,9 +19,6 @@ import java.util.UUID;
 public class DayInitializer {
 
     @Autowired
-    private DayRepository dayRepository;
-
-    @Autowired
     private TrainingTimeRepository trainingTimeRepository;
 
     @Autowired
@@ -35,23 +30,23 @@ public class DayInitializer {
     @PostConstruct
     @Async
     public void initializeDays() {
-        // Verifica se os registros já existem no banco
-        if (dayRepository.count() == 0) {
-            Profile defaultTrainer = profileRepository.
-                    findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
-            createRolesIfNotExist();
-            for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
-                Day day = new Day();
-                day.setName(dayOfTheWeek);
-                day.setActive(true);
-                dayRepository.save(day);
-
-                createTrainingTimesForDay(day, defaultTrainer);
-            }
-            System.out.println("Os dias e horários foram criados!");
-        } else {
+        // Verifica se já há horários cadastrados
+        if (trainingTimeRepository.count() > 0) {
             System.out.println("Os dias já existem, pulando esta etapa...");
+            return;
         }
+
+        Profile defaultTrainer = profileRepository
+                .findFirstByOrderByIdAsc()
+                .orElseGet(this::createDefaultTrainer);
+
+        createRolesIfNotExist();
+
+        for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
+            createTrainingTimesForDay(dayOfTheWeek, defaultTrainer);
+        }
+
+        System.out.println("Os dias e horários foram criados!");
     }
 
     private Profile createDefaultTrainer() {
@@ -86,7 +81,7 @@ public class DayInitializer {
         }
     }
 
-    private void createTrainingTimesForDay(Day day, Profile defaultTrainer) {
+    private void createTrainingTimesForDay(DayOfTheWeek day, Profile defaultTrainer) {
         int startHour = 5;
         int endHour = 23;
 
@@ -95,6 +90,7 @@ public class DayInitializer {
             LocalTime endTime = startTime.plusHours(1);
 
             TrainingTime trainingTime = new TrainingTime();
+            trainingTime.setDay(day);
             trainingTime.setStartTime(startTime);
             trainingTime.setEndTime(endTime);
             trainingTime.setStudentsLimit(20);
@@ -102,10 +98,7 @@ public class DayInitializer {
             trainingTime.setActive(true);
             trainingTime.setUpdateBy(defaultTrainer);
 
-            day.getTrainingTimes().add(trainingTime);
-
             trainingTimeRepository.save(trainingTime);
         }
-        dayRepository.save(day);
     }
 }

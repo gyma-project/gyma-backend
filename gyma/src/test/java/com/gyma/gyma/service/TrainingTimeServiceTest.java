@@ -1,14 +1,11 @@
 package com.gyma.gyma.service;
 
-import com.gyma.gyma.controller.dto.TrainingTimeDTO;
 import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingTime;
-import com.gyma.gyma.model.enums.DayOfTheWeek;
-import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -48,16 +45,7 @@ public class TrainingTimeServiceTest {
     private TrainingTimeMapper trainingTimeMapper;
 
     @Mock
-    private DayRepository dayRepository;
-
-    @Mock
-    private ProfileService profileService;
-
-    @Mock
     private ProfileRepository profileRepository;
-
-    @Mock
-    private ProfileMapper profileMapper;
 
     private Profile trainer;
     private TrainingTime trainingTime;
