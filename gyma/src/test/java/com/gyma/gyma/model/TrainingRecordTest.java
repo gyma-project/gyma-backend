@@ -1,4 +1,4 @@
-package com.gyma.gyma.model.tests;
+package com.gyma.gyma.model;
 
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingRecord;

@@ -4,7 +4,6 @@ import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
-import com.gyma.gyma.repository.DayRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.RoleRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -20,9 +19,6 @@ import java.util.UUID;
 public class DayInitializer {
 
     @Autowired
-    private DayRepository dayRepository;
-
-    @Autowired
     private TrainingTimeRepository trainingTimeRepository;
 
     @Autowired
@@ -34,19 +30,23 @@ public class DayInitializer {
     @PostConstruct
     @Async
     public void initializeDays() {
-        // Verifica se os registros já existem no banco
-        if (trainingTimeRepository.count() == 0) { // Alteramos para verificar TrainingTime
-            Profile defaultTrainer = profileRepository
-                    .findFirstByOrderByIdAsc().orElseGet(this::createDefaultTrainer);
-            createRolesIfNotExist();
-            for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
-                // Criamos os horários diretamente usando DayOfTheWeek
-                createTrainingTimesForDay(dayOfTheWeek, defaultTrainer);
-            }
-            System.out.println("Os dias e horários foram criados!");
-        } else {
+        // Verifica se já há horários cadastrados
+        if (trainingTimeRepository.count() > 0) {
             System.out.println("Os dias já existem, pulando esta etapa...");
+            return;
         }
+
+        Profile defaultTrainer = profileRepository
+                .findFirstByOrderByIdAsc()
+                .orElseGet(this::createDefaultTrainer);
+
+        createRolesIfNotExist();
+
+        for (DayOfTheWeek dayOfTheWeek : DayOfTheWeek.values()) {
+            createTrainingTimesForDay(dayOfTheWeek, defaultTrainer);
+        }
+
+        System.out.println("Os dias e horários foram criados!");
     }
 
     private Profile createDefaultTrainer() {

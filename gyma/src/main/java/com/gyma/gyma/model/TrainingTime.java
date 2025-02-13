@@ -29,7 +29,7 @@ public class TrainingTime {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "training_day", nullable = false)
     private DayOfTheWeek day;
 
     @Column(name = "start_time", nullable = false)
