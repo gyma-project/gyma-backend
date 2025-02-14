@@ -36,5 +36,11 @@ jobs:
       - name: Build docker image
         run: docker build -t gyma:latest ./gyma
 
+  deploy:
+        needs: build
+        runs-on: self-hosted
+        steps:
+          - name: Run Docker Container
+            run: docker run -d --name gyma-container gyma:latest
         
         
