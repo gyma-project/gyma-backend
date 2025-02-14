@@ -34,7 +34,7 @@ jobs:
         run: mvn test -e
 
       - name: Build docker image
-        run: docker build -t gyma:latest .
+        run: docker build -t gyma:latest ./gyma
 
         
         
