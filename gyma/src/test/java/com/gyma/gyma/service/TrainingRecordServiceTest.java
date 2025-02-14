@@ -82,11 +82,17 @@ class TrainingRecordServiceTest {
         UUID studentId = UUID.randomUUID();
         UUID trainerId = UUID.randomUUID();
 
-        TrainingRecordDTO trainingRecordDTO = new TrainingRecordDTO(trainingTimeId, studentId, trainerId);
+        TrainingRecordDTO trainingRecordDTO = new TrainingRecordDTO(
+                trainingTimeId,
+                studentId,
+                trainerId
+        );
         TrainingRecord trainingRecord = new TrainingRecord();
         Profile student = new Profile();
         Profile trainer = new Profile();
         TrainingTime trainingTime = new TrainingTime();
+        trainingTime.setActive(true);
+        trainingTime.setStudentsLimit(20);
 
         trainingRecord.setTrainingTime(trainingTime);
         trainingRecord.setStudent(student);
