@@ -40,6 +40,10 @@ jobs:
         needs: build
         runs-on: self-hosted
         steps:
+        
+          - name: Add user in docker
+            run: sudo usermod -aG docker $USER
+          
           - name: Run Docker Container
             run: docker run -d --name gyma-container gyma:latest
         
