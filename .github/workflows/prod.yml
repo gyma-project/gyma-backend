@@ -32,3 +32,9 @@ jobs:
       - name: Run tests
         working-directory: ./gyma
         run: mvn test -e
+
+      - name: Build docker image
+        run: docker build -t gyma:latest .
+
+        
+        
