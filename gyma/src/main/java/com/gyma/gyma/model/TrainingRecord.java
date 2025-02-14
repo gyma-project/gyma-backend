@@ -8,10 +8,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="appointment")
+@Table(name="appointments")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
@@ -25,18 +26,20 @@ public class TrainingRecord {
     @JoinColumn(name = "training_time_id", nullable = false)
     private TrainingTime trainingTime;
 
-    @Column(name = "keycloak_user_id", nullable = false, length = 255)
-    private String student;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Profile student;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private String trainer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @CreatedDate
     @Column(name="created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @LastModifiedDate
     @Column(name="updated_at")
-    private LocalDateTime updateAt;
+    private LocalDate updateAt;
 
 }

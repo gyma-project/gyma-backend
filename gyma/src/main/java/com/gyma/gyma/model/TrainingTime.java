@@ -1,13 +1,9 @@
 package com.gyma.gyma.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,10 +15,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="training_time", schema = "public")
+@Table(name="training_times", schema = "public")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrainingTime {
 
     @Id
@@ -30,9 +28,9 @@ public class TrainingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(mappedBy = "trainingTimes", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Day> day = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "training_day", nullable = false)
+    private DayOfTheWeek day;
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
@@ -43,8 +41,9 @@ public class TrainingTime {
     @Column(name = "students_limit", nullable = false)
     private Integer studentsLimit;
 
-    @Column(name = "trainer_id")
-    private UUID trainerId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
     @Column(nullable = false)
     private Boolean active;
@@ -57,7 +56,8 @@ public class TrainingTime {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false)
-    private UUID idUsuario;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 
 }

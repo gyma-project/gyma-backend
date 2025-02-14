@@ -1,4 +1,4 @@
-package br.com.danieleleao.app_auth_youtube.security;
+package com.gyma.gyma.config;
 
 import java.util.Collection;
 import java.util.Map;

@@ -5,13 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name="training_sheet", schema = "public")
+@Table(name="training_sheets", schema = "public")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class TrainingSheet {
 
     @Id
@@ -19,17 +22,21 @@ public class TrainingSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "keycloak_user_id", nullable = false, length = 255)
-    private String student;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Profile student;
 
-    @Column(name = "trainer_keycloak_user_id", nullable = false, length = 255)
-    private String trainer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private Profile trainer;
 
-    @Column(name = "height")
-    private Double height;
-
-    @Column(name = "weight")
-    private Double weight;
+    @ManyToMany
+    @JoinTable(
+            name="training_sheet_exercise",
+            joinColumns = @JoinColumn(name="training_sheet_id"),
+            inverseJoinColumns = @JoinColumn(name="exercise_id")
+    )
+    private List<Exercise> exercises;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -42,7 +49,8 @@ public class TrainingSheet {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "edit_by", nullable = false, length = 255)
-    private Integer idUsuario;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "update_by", nullable = false)
+    private Profile updateBy;
 
 }
