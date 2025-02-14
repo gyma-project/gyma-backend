@@ -2,9 +2,12 @@ package com.gyma.gyma.service;
 import com.gyma.gyma.controller.dto.TrainingRecordDTO;
 import com.gyma.gyma.controller.specificiations.TrainingRecordSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
+import com.gyma.gyma.exception.StudentLimitExceededException;
+import com.gyma.gyma.exception.TrainingTimeNotAvailableException;
 import com.gyma.gyma.mappers.TrainingRecordMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingRecord;
+import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingRecordRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -83,6 +86,16 @@ public class TrainingRecordService {
         var trainer = profileRepository.findByKeycloakId(dto.trainer())
                 .orElseThrow(() -> new ResourceNotFoundException("Trainer não encontrado por UUID"));
 
+        if(!trainingTime.getActive()){
+            throw new TrainingTimeNotAvailableException("Esse horário não está mais disponível.");
+        }
+        long appointments = trainingRecordRepository.countByTrainingTimeAndCreatedAt(
+                trainingTime, LocalDate.now()
+        );
+        if(appointments >= trainingTime.getStudentsLimit()){
+            throw new StudentLimitExceededException("Limite de alunos para este horário atingido.");
+        }
+
         TrainingRecord trainingRecord = new TrainingRecord();
         trainingRecord.setTrainingTime(trainingTime);
         trainingRecord.setStudent(student);
@@ -133,4 +146,6 @@ public class TrainingRecordService {
 
         return mensagemRelatorio;
     }
+
+
 }
