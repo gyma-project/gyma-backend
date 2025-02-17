@@ -1,7 +1,7 @@
 name: Deploy
 
 on:
-  push: 
+  push:
     branches: [dev]
 
 jobs:
@@ -31,6 +31,11 @@ jobs:
 
       - name: Build docker image
         run: docker build -t gyma:latest ./gyma
+
+      - name: Stop existing container (if any)
+        run: |
+          docker stop gyma-container || true
+          docker rm gyma-container || true
 
       - name: Run Docker Container
         run: docker run -d --name gyma-container gyma:latest
