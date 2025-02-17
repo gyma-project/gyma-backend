@@ -21,10 +21,6 @@ jobs:
       - name: List files
         run: ls -R ./gyma
 
-      - name: Validate Maven setup
-        working-directory: ./gyma
-        run: mvn validate
-
       - name: Build with Maven
         working-directory: ./gyma
         run: mvn clean install -DskipTests -e
