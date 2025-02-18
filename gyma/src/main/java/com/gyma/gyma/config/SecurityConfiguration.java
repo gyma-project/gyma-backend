@@ -1,6 +1,7 @@
 package com.gyma.gyma.config;
 
 
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,11 @@ public class SecurityConfiguration {
                 )
                 .csrf(csrf -> csrf.disable())
                 .build();
+    }
+
+    @Bean
+    public KeycloakAuthenticationProvider keycloakAuthenticationProvider() {
+        return new KeycloakAuthenticationProvider();
     }
 
     @Bean

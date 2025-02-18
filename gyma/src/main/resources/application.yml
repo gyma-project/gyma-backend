@@ -10,6 +10,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/gyma
+          jwk-set-uri: http://localhost:8080/realms/gyma/protocol/openid-connect/certs
 logging:
   level:
     org:
@@ -20,3 +26,17 @@ server:
   port: 8081
 springdoc:
   override-with-generic-response: false
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: gyma
+  resource: gyma_spring
+  credentials:
+    secret: SafLxP65rp0nXhHgUP3Qi2vm4H0cIMut
+  public-client: false
+  use-resource-role-mappings: true
+  bearer-only: true
+  ssl-required: external
+  cookie:
+    path: /
+  cors: true
+
