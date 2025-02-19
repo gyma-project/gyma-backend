@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/api/v1/profiles")
 @Tag(name = "Perfis", description = "Gerenciamento de perfis.")
 public class ProfileController {
 

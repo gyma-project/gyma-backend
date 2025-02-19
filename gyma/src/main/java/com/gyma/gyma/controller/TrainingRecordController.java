@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/training-records")
+@RequestMapping("/api/v1/training-records")
 @Tag(name = "Agendamentos", description = "Gerenciamento de agendamentos.")
 public class TrainingRecordController {
 

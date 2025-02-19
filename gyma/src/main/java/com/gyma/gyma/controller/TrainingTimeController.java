@@ -19,7 +19,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("training-times")
+@RequestMapping("/api/v1/training-times")
 @Tag(name = "Horário de Treino", description = "Gerenciamento de treinos.")
 public class TrainingTimeController {
 

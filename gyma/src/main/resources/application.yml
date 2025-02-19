@@ -1,3 +1,5 @@
+# application-yml
+# SERVER CONFIGS
 spring:
   application:
     name: gyma
@@ -16,16 +18,38 @@ spring:
         jwt:
           issuer-uri: http://localhost:8080/realms/gyma
           jwk-set-uri: http://localhost:8080/realms/gyma/protocol/openid-connect/certs
+
+# LOGS
 logging:
   level:
     org:
       springframework:
         web: DEBUG
         security: DEBUG
+
+# SERVER PORT
 server:
   port: 8081
+
+# SWAGGER
 springdoc:
   override-with-generic-response: false
+
+# METRICS
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# KEYCLOAK SETTINGS
 keycloak:
   auth-server-url: http://localhost:8080
   realm: gyma
