@@ -25,6 +25,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/profiles/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

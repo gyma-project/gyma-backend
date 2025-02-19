@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("training-sheets")
+@RequestMapping("/api/v1/training-sheets")
 @Tag(name = "Ficha de Treino", description = "Gerenciamento de fichas de treino.")
 public class TrainingSheetController {
 

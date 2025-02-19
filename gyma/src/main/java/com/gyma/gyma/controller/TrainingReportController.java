@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/training-reports")
+@RequestMapping("/api/v1/training-reports")
 @Tag(name = "Relatórios de Treino", description = "Gerenciamento de relatórios de treino.")
 public class TrainingReportController {
 
