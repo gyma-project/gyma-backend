@@ -1,13 +1,12 @@
 package com.gyma.gyma.service;
 import com.gyma.gyma.controller.dto.TrainingRecordDTO;
-import com.gyma.gyma.controller.specificiations.TrainingRecordSpecification;
+import com.gyma.gyma.specificiations.TrainingRecordSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.exception.StudentLimitExceededException;
 import com.gyma.gyma.exception.TrainingTimeNotAvailableException;
 import com.gyma.gyma.mappers.TrainingRecordMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingRecord;
-import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingRecordRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -18,13 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.gyma.gyma.model.TrainingRecord;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class TrainingRecordService {

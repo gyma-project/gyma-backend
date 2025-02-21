@@ -1,7 +1,7 @@
 package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.TrainingTimeUpdateDTO;
-import com.gyma.gyma.controller.specificiations.TrainingTimeSpecification;
+import com.gyma.gyma.specificiations.TrainingTimeSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.mappers.TrainingTimeMapper;
