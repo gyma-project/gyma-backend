@@ -100,6 +100,7 @@ public class ProfileService {
         profile.setFirstName(profileRequestDTO.firstName());
         profile.setLastName(profileRequestDTO.lastName());
         profile.setKeycloakId(profileRequestDTO.keycloakUserId());
+        profile.setActive(true);
 
         if (profileRequestDTO.roleIds() != null && !profileRequestDTO.roleIds().isEmpty()) {
             Set<Integer> roleIdsSet = new HashSet<>(profileRequestDTO.roleIds());
