@@ -54,6 +54,7 @@ class TrainingSheetServiceTest {
         updater.setKeycloakId(UUID.randomUUID());
 
         trainingSheetDTO = new TrainingSheetDTO(
+                "Treino Padrão",
                 student.getKeycloakId(),
                 trainer.getKeycloakId(),
                 "Treino de força",
@@ -113,6 +114,7 @@ class TrainingSheetServiceTest {
     @Test
     void shouldThrowExceptionWhenProfileNotFound() {
         TrainingSheetDTO trainingSheetDTO = new TrainingSheetDTO(
+                "Treino Padrão",
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Treino de força",
@@ -139,6 +141,7 @@ class TrainingSheetServiceTest {
         Integer id = 1;
 
         TrainingSheetDTO trainingSheetDTO = new TrainingSheetDTO(
+                "Treino Padrão",
                 UUID.randomUUID(), // Estudante
                 UUID.randomUUID(), // Treinador
                 "Treino de força",
@@ -178,6 +181,7 @@ class TrainingSheetServiceTest {
         Integer id = 1;
 
         TrainingSheetDTO trainingSheetDTO = new TrainingSheetDTO(
+                "Treino Padrão",
                 UUID.randomUUID(), // Estudante
                 UUID.randomUUID(), // Treinador
                 "Treino de força",
