@@ -41,6 +41,7 @@ public class TrainingSheetService {
         }
 
         TrainingSheet trainingSheet = new TrainingSheet();
+        trainingSheet.setName(trainingSheet.getName());
         trainingSheet.setStudent(studentProfile.get());
         trainingSheet.setDescription(trainingSheetDTO.description());
         trainingSheet.setTrainer(trainerProfile.get());

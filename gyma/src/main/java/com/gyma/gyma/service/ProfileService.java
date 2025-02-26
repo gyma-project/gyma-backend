@@ -4,26 +4,19 @@ import com.gyma.gyma.controller.dto.ProfileRequestDTO;
 import com.gyma.gyma.specificiations.ProfileSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
-import com.gyma.gyma.model.Image;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.Role;
-import com.gyma.gyma.repository.ImageRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.RoleRepository;
-import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,8 +38,6 @@ public class ProfileService {
     @Autowired
     private MinioClient minioClient;
 
-    @Autowired
-    private ImageRepository imageRepository;
 
     public Page<Profile> listarTodos(
             String username,
@@ -101,6 +92,7 @@ public class ProfileService {
         profile.setLastName(profileRequestDTO.lastName());
         profile.setKeycloakId(profileRequestDTO.keycloakUserId());
         profile.setActive(true);
+        profile.setImageUrl(profile.getImageUrl());
 
         if (profileRequestDTO.roleIds() != null && !profileRequestDTO.roleIds().isEmpty()) {
             Set<Integer> roleIdsSet = new HashSet<>(profileRequestDTO.roleIds());
@@ -118,6 +110,7 @@ public class ProfileService {
         profile.setUsername(profileRequestDTO.username());
         profile.setEmail(profileRequestDTO.email());
         profile.setKeycloakId(profileRequestDTO.keycloakUserId());
+        profile.setImageUrl(profile.getImageUrl());
         return profileRepository.save(profile);
     }
 
@@ -159,41 +152,4 @@ public class ProfileService {
         return profileRepository.save(profile);
     }
 
-    public void updateProfileImage(
-            Integer id,
-            MultipartFile file
-    ) throws Exception {
-        Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado para o ID: " + id));
-
-        var inputStream = file.getInputStream();
-        var objectId = UUID.randomUUID().toString();
-
-        minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket("images")
-                        .object(objectId)
-                        .stream(inputStream, inputStream.available(), -1)
-                        .contentType(file.getContentType())
-                        .build()
-        );
-
-        Image image = new Image();
-        image.setIdObject(objectId);
-        imageRepository.save(image);
-
-        profile.setImage(image);
-        profileRepository.save(profile);
-    }
-
-    public byte[] downloadImage(String objectName) throws Exception {
-        InputStream inputStream = minioClient.getObject(
-                GetObjectArgs.builder()
-                        .bucket("images")
-                        .object(objectName)
-                        .build()
-        );
-
-        return IOUtils.toByteArray(inputStream);
-    }
 }
