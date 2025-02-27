@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 
@@ -105,11 +106,35 @@ public class ProfileService {
         return profileMapper.toDTO(profile);
     }
 
-    public Profile atualizar(Integer id, ProfileRequestDTO profileRequestDTO) {
+    public Profile atualizar(
+            Integer id,
+            ProfileRequestDTO profileRequestDTO,
+            String userId,
+            List<String> roles
+    ) {
         Profile profile = buscarPorId(id);
+
+        boolean isAdmin = roles.contains("ADMIN");
+        boolean isTrainer = roles.contains("TRAINER");
+        boolean isOwner = profile.getKeycloakId().equals(UUID.fromString(userId));
+
+        if (!(isAdmin || isTrainer || isOwner)) {
+            throw new AccessDeniedException("Você não tem permissão para editar este perfil.");
+        }
+
         profile.setUsername(profileRequestDTO.username());
         profile.setEmail(profileRequestDTO.email());
         profile.setKeycloakId(profileRequestDTO.keycloakUserId());
+        profile.setFirstName(profileRequestDTO.firstName());
+        profile.setLastName(profileRequestDTO.lastName());
+
+        if (profileRequestDTO.roleIds() != null && !profileRequestDTO.roleIds().isEmpty()) {
+            Set<Integer> roleIdsSet = new HashSet<>(profileRequestDTO.roleIds());
+            List<Role> rolesList = roleRepository.findAllById(roleIdsSet);
+            Set<Role> newRoles  = new HashSet<>(rolesList);
+            profile.setRoles(newRoles);
+        }
+
         profile.setImageUrl(profile.getImageUrl());
         return profileRepository.save(profile);
     }
