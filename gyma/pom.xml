@@ -115,6 +115,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
@@ -196,13 +202,6 @@
 				<artifactId>pitest-maven</artifactId>
 				<version>1.15.2</version>
 				<configuration>
-					<targetClasses>
-						<param>com.gyma.gyma.controller.*</param> <!-- Substitua pelo pacote de services -->
-						<param>com.gyma.gyma.service.*</param> <!-- Substitua pelo pacote de controllers -->
-					</targetClasses>
-					<targetTests>
-						<param>com.gyma.gyma.service.*</param> <!-- Substitua pelos testes de service -->
-					</targetTests>
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>

@@ -275,6 +275,21 @@ public class TrainingTimeServiceTest {
         verify(profileRepository).findByKeycloakId(updater.getKeycloakId());
     }
 
+    @Test
+    @DisplayName("Deve lançar exceção quando horário de treino não for encontrado ao alternar status ativo")
+    public void shouldThrowExceptionWhenTrainingTimeNotFoundForToggle() {
+        Integer id = 1;
+
+        when(trainingTimeRepository.findById(id)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> trainingTimeService.toggleActive(id)
+        );
+
+        assertEquals("Horário de treino não encontrado.", exception.getMessage());
+        verify(trainingTimeRepository).findById(id);
+    }
 
 
 }
