@@ -41,7 +41,7 @@ public class TrainingSheetService {
         }
 
         TrainingSheet trainingSheet = new TrainingSheet();
-        trainingSheet.setName(trainingSheet.getName());
+        trainingSheet.setName(trainingSheetDTO.name());
         trainingSheet.setStudent(studentProfile.get());
         trainingSheet.setDescription(trainingSheetDTO.description());
         trainingSheet.setTrainer(trainerProfile.get());
@@ -75,6 +75,7 @@ public class TrainingSheetService {
             throw new ResourceNotFoundException("Algum perfil não foi encontrado.");
         }
 
+        trainingSheet.setName(trainingSheetDTO.name());
         trainingSheet.setStudent(studentProfile.get());
         trainingSheet.setDescription(trainingSheetDTO.description());
         trainingSheet.setTrainer(trainerProfile.get());
