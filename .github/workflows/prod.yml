@@ -18,7 +18,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: List files in gyma directory
+      - name: List files
         run: ls -R ./gyma
 
       - name: Build with Maven
@@ -29,10 +29,30 @@ jobs:
         working-directory: ./gyma
         run: mvn test -Dspring.profiles.active=test -e
 
+      - name: Set environment variables for Docker Compose
+        run: |
+          echo "GRAFANA_PORT=${{ secrets.GRAFANA_PORT }}" >> $GITHUB_ENV
+          echo "GYMA_PORT=${{ secrets.GYMA_PORT }}" >> $GITHUB_ENV
+          echo "PGADMIN_DEFAULT_EMAIL=${{ secrets.PGADMIN_DEFAULT_EMAIL }}" >> $GITHUB_ENV
+          echo "PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }}" >> $GITHUB_ENV
+          echo "PGADMIN_PORT=${{ secrets.PGADMIN_PORT }}" >> $GITHUB_ENV
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> $GITHUB_ENV
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "PROMETHEUS_PORT=${{ secrets.PROMETHEUS_PORT }}" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> $GITHUB_ENV
+          echo "SPRING_JPA_HIBERNATE_DDL_AUTO=${{ secrets.SPRING_JPA_HIBERNATE_DDL_AUTO }}" >> $GITHUB_ENV
+
+      - name: Build docker image
+        run: docker build -t gyma:latest ./gyma
+
       - name: Stop existing containers (if any)
         run: |
-          docker-compose -f ./gyma/docker-compose.yml down || true  
+          docker-compose -f ./gyma/docker-compose.yml down || true
 
       - name: Run Docker Compose
         run: |
-          docker-compose -f ./gyma/docker-compose.yml up -d 
+          docker-compose -f ./gyma/docker-compose.yml up -d
