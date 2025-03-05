@@ -46,6 +46,15 @@ jobs:
           echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> ./gyma/.env
           echo "SPRING_JPA_HIBERNATE_DDL_AUTO=${{ secrets.SPRING_JPA_HIBERNATE_DDL_AUTO }}" >> ./gyma/.env
 
+      - name: Check environment variables
+        run: |
+          echo "PROMETHEUS_PORT=${{ secrets.PROMETHEUS_PORT }}"
+          echo "GRAFANA_PORT=${{ secrets.GRAFANA_PORT }}"
+          echo "GYMA_PORT=${{ secrets.GYMA_PORT }}"
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}"
+          echo "PGADMIN_PORT=${{ secrets.PGADMIN_PORT }}"
+
+
       - name: Check if .env file is created
         run: ls -l ./gyma/.env
 
