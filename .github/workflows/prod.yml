@@ -58,4 +58,5 @@ jobs:
 
       - name: Run Docker Compose
         run: |
-          docker-compose --env-file .env -f ./gyma/docker-compose.yml up -d
+          docker-compose --env-file ./gyma/.env -f ./gyma/docker-compose.yml up -d
+
