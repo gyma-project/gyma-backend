@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/gyma
     username: postgres
-    password: root
+    password: pgadmin
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -63,4 +63,5 @@ keycloak:
   cookie:
     path: /
   cors: true
+
 

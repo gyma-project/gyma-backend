@@ -132,6 +132,34 @@ class ProfileServiceTest {
     }
 
     @Test
+    void testCriar_UsernameAlreadyExists() {
+        ProfileRequestDTO dto = mock(ProfileRequestDTO.class);
+        when(dto.username()).thenReturn("existingUsername");
+        when(profileRepository.existsByUsername("existingUsername")).thenReturn(true);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> profileService.criar(dto)
+        );
+
+        assertEquals("Já existe um perfil com o username informado.", exception.getMessage());
+    }
+
+    @Test
+    void testCriar_EmailAlreadyExists() {
+        ProfileRequestDTO dto = mock(ProfileRequestDTO.class);
+        when(dto.email()).thenReturn("existingEmail@example.com");
+        when(profileRepository.existsByEmail("existingEmail@example.com")).thenReturn(true);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> profileService.criar(dto)
+        );
+
+        assertEquals("Já existe um perfil com o email informado.", exception.getMessage());
+    }
+
+    @Test
     void testDeletar() {
         Profile profile = new Profile();
         profile.setId(1);
@@ -184,3 +212,4 @@ class ProfileServiceTest {
         assertEquals("Já existe um perfil com o email informado.", exception.getMessage());
     }
 }
+
