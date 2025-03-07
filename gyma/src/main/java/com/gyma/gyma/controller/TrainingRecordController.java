@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TrainingRecordController {
 
     @GetMapping("/relatorio")
     @Operation(summary = "Gerar relatório", description = "Criar um relatório.")
-    public String criarRelatorio() {
+    public String criarRelatorio() throws IOException {
         return trainingRecordService.criarRelatorio();
     }
 
