@@ -1,7 +1,7 @@
 package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.TransactionDTO;
-import com.gyma.gyma.controller.specificiations.TransactionSpecification;
+import com.gyma.gyma.specificiations.TransactionSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.TransactionMapper;
 import com.gyma.gyma.model.Profile;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service

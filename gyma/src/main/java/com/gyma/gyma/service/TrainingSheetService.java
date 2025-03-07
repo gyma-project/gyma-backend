@@ -5,15 +5,23 @@ import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.TrainingSheetMapper;
 import com.gyma.gyma.model.Exercise;
 import com.gyma.gyma.model.Profile;
+import com.gyma.gyma.model.TrainingRecord;
 import com.gyma.gyma.model.TrainingSheet;
 import com.gyma.gyma.repository.ExerciseRepository;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingSheetRepository;
+import com.gyma.gyma.specificiations.TrainingRecordSpecification;
+import com.gyma.gyma.specificiations.TrainingSheetSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TrainingSheetService {
@@ -41,6 +49,7 @@ public class TrainingSheetService {
         }
 
         TrainingSheet trainingSheet = new TrainingSheet();
+        trainingSheet.setName(trainingSheetDTO.name());
         trainingSheet.setStudent(studentProfile.get());
         trainingSheet.setDescription(trainingSheetDTO.description());
         trainingSheet.setTrainer(trainerProfile.get());
@@ -74,6 +83,7 @@ public class TrainingSheetService {
             throw new ResourceNotFoundException("Algum perfil não foi encontrado.");
         }
 
+        trainingSheet.setName(trainingSheetDTO.name());
         trainingSheet.setStudent(studentProfile.get());
         trainingSheet.setDescription(trainingSheetDTO.description());
         trainingSheet.setTrainer(trainerProfile.get());
@@ -93,7 +103,30 @@ public class TrainingSheetService {
         trainingSheetRepository.deleteById(id);
     }
 
-    public List<TrainingSheet> listar(){
-        return trainingSheetRepository.findAll();
+    public Page<TrainingSheet> listar(
+            Integer pageNumber,
+            Integer size,
+            String name,
+            UUID studentKeycloakId,
+            UUID trainerKeycloakId,
+            UUID updateByUuid
+    ){
+        if (pageNumber == null) {
+            pageNumber = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, size);
+
+        Specification<TrainingSheet> spec = Specification.where(
+                TrainingSheetSpecification.byStudentKeycloakId(studentKeycloakId)
+                        .and(TrainingSheetSpecification.byName(name))
+                        .and(TrainingSheetSpecification.byTrainerKeycloakId(trainerKeycloakId))
+                        .and(TrainingSheetSpecification.byUpdateBy(updateByUuid))
+        );
+
+        return trainingSheetRepository.findAll(spec, pageable);
     }
 }

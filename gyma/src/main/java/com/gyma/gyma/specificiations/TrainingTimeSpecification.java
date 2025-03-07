@@ -1,4 +1,4 @@
-package com.gyma.gyma.controller.specificiations;
+package com.gyma.gyma.specificiations;
 
 import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.model.enums.DayOfTheWeek;
@@ -54,12 +54,13 @@ public class TrainingTimeSpecification {
             }
             try {
                 DayOfTheWeek dayEnum = DayOfTheWeek.valueOf(dayName.toUpperCase());
-                return builder.isMember(dayEnum, root.get("days"));
+                return builder.equal(root.get("day"), dayEnum);
             } catch (IllegalArgumentException e) {
                 return null;
             }
         };
     }
+
 
     public static Specification<TrainingTime> byStudentLimit(Integer studentLimit) {
         return (root, query, builder) -> {

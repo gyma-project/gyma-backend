@@ -1,13 +1,14 @@
 package com.gyma.gyma.service;
 import com.gyma.gyma.controller.dto.TrainingRecordDTO;
-import com.gyma.gyma.controller.specificiations.TrainingRecordSpecification;
+import com.gyma.gyma.model.enums.CategoryTransaction;
+import com.gyma.gyma.repository.TransactionRepository;
+import com.gyma.gyma.specificiations.TrainingRecordSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.exception.StudentLimitExceededException;
 import com.gyma.gyma.exception.TrainingTimeNotAvailableException;
 import com.gyma.gyma.mappers.TrainingRecordMapper;
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingRecord;
-import com.gyma.gyma.model.TrainingTime;
 import com.gyma.gyma.repository.ProfileRepository;
 import com.gyma.gyma.repository.TrainingRecordRepository;
 import com.gyma.gyma.repository.TrainingTimeRepository;
@@ -18,13 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.gyma.gyma.model.TrainingRecord;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class TrainingRecordService {
@@ -43,6 +44,10 @@ public class TrainingRecordService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
 
     public Page<TrainingRecord> listarTodos(
             Integer trainingTimeId,
@@ -113,39 +118,86 @@ public class TrainingRecordService {
     }
 
     public String criarRelatorio() {
+        String reportHtml = """
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Relatório Semanal - GYMA</title>
+                </head>
+                <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: Arial, sans-serif;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f3f4f6">
+                    <tr>
+                        <td align="center">
+                            <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" style="margin-top: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                
+                                <!-- Cabeçalho Vermelho -->
+                                <tr>
+                                    <td align="center" bgcolor="#EF4444" style="border-top-left-radius: 8px; border-top-right-radius: 8px; padding: 10px;">
+                                        <h1 style="color: white; font-size: 24px; font-weight: bold; margin: 0;">Relatório Semanal - GYMA</h1>
+                                    </td>
+                                </tr>
+                
+                                <!-- Corpo do e-mail -->
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <p style="text-align: left; color: #4b5563; font-size: 16px;">Prezado(a) usuário do <strong>GYMA</strong>,</p>
+                                        <p style="text-align: left; color: #4b5563; font-size: 16px;">Espero que esteja bem!</p>
+                                        <p style="text-align: left; color: #4b5563; font-size: 16px;">
+                                            Segue abaixo o relatório detalhado dos agendamentos de treinos realizados. Este relatório visa fornecer uma visão clara sobre as sessões agendadas e a participação dos alunos.
+                                        </p>
+                                        <h3 style="color: #1f2937; font-size: 18px; font-weight: bold; text-align: left;">Resumo dos Agendamentos:</h3>
+                                        <ul style="text-align: left; color: #4b5563; font-size: 16px; list-style: none; padding: 0;">
+                                            <li>📌 <strong>Número total de treinos agendados:</strong> ${totalTreinos}</li>
+                                        </ul>
+                                        
+                                        <h3 style="color: #1f2937; font-size: 18px; font-weight: bold; text-align: left;">Resumo das Transações:</h3>
+                                        <ul style="text-align: left; color: #4b5563; font-size: 16px; list-style: none; padding: 0;">
+                                            <li>📌 <strong>Total de transações realizadas:</strong> ${totalTransacoes}</li>
+                                            <li>📌 <strong>Valor total transacionado:</strong> ${totalValorTransacionado}</li>
+                                            <li>📌 <strong>Categoria mais frequente de transação:</strong> ${categoriaMaisFrequente}</li>
+                                        </ul>
 
-        String templateRelatorio =
-                "Relatório de Agendamentos de Treinos\n" +
-                        "Prezado(a) usuário do GYMA,\n" +
-                        "Espero que esteja bem!\n" +
-                        "Segue abaixo o relatório detalhado dos agendamentos de treinos realizados. Este relatório visa fornecer uma visão clara sobre as sessões agendadas e a participação dos alunos.\n" +
-                        "Resumo dos Agendamentos:\n" +
-                        "    Número total de treinos agendados: [Número total]\n" +
-                        "    Número de treinos realizados: [Número realizado]\n" +
-                        "    Número de treinos não comparecidos: [Número não comparecido]\n" +
-                        "    Treinos mais agendados: [Exemplo: \"Musculação\", \"Yoga\", etc.]" +
-                        "Caso haja qualquer dúvida ou se precisar de mais informações, estou à disposição para ajudar.\n" +
-                        "\n" +
-                        "Agradecemos pela confiança e estamos sempre à disposição para continuar oferecendo o melhor serviço para você e seus alunos.\n" +
-                        "\n" +
-                        "Atenciosamente, GYMA.";
+                                        <p style="text-align: left; color: #4b5563; font-size: 16px;">
+                                            <strong>Atenciosamente,</strong><br>Equipe GYMA
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </body>
+                </html>
+        """;
 
-        //Pegar emails
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+        long totalTrainingThisWeek = trainingRecordRepository.countByCreatedAtBetween(startOfWeek, endOfWeek);
+
+        long totalTransactionsThisWeek = transactionRepository.countByCreatedAtBetween(startOfWeek, endOfWeek);
+        BigDecimal totalAmountTransacted = transactionRepository.sumPriceByCreatedAtBetween(startOfWeek, endOfWeek);
+        String mostFrequentCategory = transactionRepository.findMostFrequentCategory(startOfWeek, endOfWeek);
+
+        String mostFrequentCategoryDescription = CategoryTransaction.valueOf(mostFrequentCategory).getDescription();
+
+        String filledReport = reportHtml
+                .replace("${totalTreinos}", String.valueOf(totalTrainingThisWeek))
+                .replace("${totalTransacoes}", String.valueOf(totalTransactionsThisWeek))
+                .replace("${totalValorTransacionado}", totalAmountTransacted.toString())
+                .replace("${categoriaMaisFrequente}", mostFrequentCategoryDescription);
+
         List<Profile> adminProfiles = profileRepository.findByRoles_Name("ADMIN");
         List<String> emailList = adminProfiles.stream()
                 .map(Profile::getEmail)
                 .toList();
 
-        System.out.println(emailList);
-
-        String mensagemRelatorio = "dinizrobert2002@gmail.com;" + templateRelatorio;
-
-
-
+        String mensagemRelatorio = String.join("|", emailList) + "|" + filledReport;
         rabbitTemplate.convertAndSend("notify", mensagemRelatorio);
 
         return mensagemRelatorio;
     }
-
 
 }

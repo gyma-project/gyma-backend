@@ -12,6 +12,7 @@ import com.gyma.gyma.mappers.TrainingSheetMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.data.domain.Page;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +56,7 @@ class TrainingSheetServiceTest {
         updater.setKeycloakId(UUID.randomUUID());
 
         trainingSheetDTO = new TrainingSheetDTO(
+                "Treino Padrão",
                 student.getKeycloakId(),
                 trainer.getKeycloakId(),
                 "Treino de força",

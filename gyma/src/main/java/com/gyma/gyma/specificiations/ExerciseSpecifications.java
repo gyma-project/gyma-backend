@@ -1,4 +1,4 @@
-package com.gyma.gyma.controller.specificiations;
+package com.gyma.gyma.specificiations;
 
 import com.gyma.gyma.model.Exercise;
 import com.gyma.gyma.model.enums.MuscleGroup;

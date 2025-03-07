@@ -1,7 +1,7 @@
 package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.ExerciseDTO;
-import com.gyma.gyma.controller.specificiations.ExerciseSpecifications;
+import com.gyma.gyma.specificiations.ExerciseSpecifications;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ExerciseMapper;
 import com.gyma.gyma.model.Exercise;
@@ -13,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ExerciseService {

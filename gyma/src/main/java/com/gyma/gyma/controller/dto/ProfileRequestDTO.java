@@ -25,7 +25,9 @@ public record ProfileRequestDTO(
         UUID keycloakUserId,
 
         @NotBlank(message="Papéis não podem ser vazio.")
-        Set<Integer> roleIds
+        Set<Integer> roleIds,
+
+        String imageUrl
 ) {
 
 }

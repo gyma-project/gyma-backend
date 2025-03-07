@@ -27,7 +27,6 @@ public class TrainingTimeController {
     private TrainingTimeService trainingTimeService;
 
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping
     @Operation(summary = "Listar", description = "Listar todos horários de treino.")
     public Page<TrainingTime> getAllTrainingTimes(
@@ -54,7 +53,6 @@ public class TrainingTimeController {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping("/{id}")
     @Operation(summary = "Buscar por ID", description = "Buscar por ID horário de treino.")
     public ResponseEntity<TrainingTime> getTrainingTimeById(@PathVariable Integer id) {
@@ -71,7 +69,6 @@ public class TrainingTimeController {
         return ResponseEntity.ok(trainingTimeService.toggleActive(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PatchMapping("/{id}")
     @Operation(summary = "Editar", description = "Editar parcialmente horário de treino.")
     public ResponseEntity<TrainingTime> editarParcialmente(

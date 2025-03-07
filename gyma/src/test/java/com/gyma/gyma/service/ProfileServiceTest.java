@@ -1,7 +1,6 @@
 package com.gyma.gyma.service;
 
 import com.gyma.gyma.controller.dto.ProfileRequestDTO;
-import com.gyma.gyma.controller.specificiations.ProfileSpecification;
 import com.gyma.gyma.exception.ResourceNotFoundException;
 import com.gyma.gyma.mappers.ProfileMapper;
 import com.gyma.gyma.model.Profile;

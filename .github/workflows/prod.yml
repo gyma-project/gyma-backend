@@ -27,15 +27,16 @@ jobs:
 
       - name: Run tests
         working-directory: ./gyma
-        run: mvn test -e
+        run: mvn test -Dspring.profiles.active=test -e
 
       - name: Build docker image
         run: docker build -t gyma:latest ./gyma
 
-      - name: Stop existing container (if any)
-        run: |
-          docker stop gyma-container || true
-          docker rm gyma-container || true
+      #- name: Stop existing containers (if any)
+      #  run: |
+      #    docker-compose -f ./gyma/docker-compose.yml down || true
 
-      - name: Run Docker Container
-        run: docker run -d --name gyma-container gyma:latest
+     # - name: Run Docker Compose
+     #   run: |
+     #     docker-compose --env-file ./gyma/.env -f ./gyma/docker-compose.yml up -d
+

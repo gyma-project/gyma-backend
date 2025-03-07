@@ -27,8 +27,6 @@ public class DayInitializer {
     @Autowired
     private RoleRepository roleRepository;
 
-    @PostConstruct
-    @Async
     public void initializeDays() {
         // Verifica se já há horários cadastrados
         if (trainingTimeRepository.count() > 0) {

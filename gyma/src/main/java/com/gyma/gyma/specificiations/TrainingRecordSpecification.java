@@ -1,4 +1,4 @@
-package com.gyma.gyma.controller.specificiations;
+package com.gyma.gyma.specificiations;
 
 import com.gyma.gyma.model.Profile;
 import com.gyma.gyma.model.TrainingRecord;

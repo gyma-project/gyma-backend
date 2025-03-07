@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +26,6 @@ public class TrainingRecordController {
     @Autowired
     private TrainingRecordService trainingRecordService;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @PostMapping
     @Operation(summary = "Criar", description = "Criar um agendamento.")
     public ResponseEntity<TrainingRecordDTO> criar(@RequestBody TrainingRecordDTO trainingRecordDTO) {
@@ -35,12 +35,11 @@ public class TrainingRecordController {
 
     @GetMapping("/relatorio")
     @Operation(summary = "Gerar relatório", description = "Criar um relatório.")
-    public String criarRelatorio() {
+    public String criarRelatorio() throws IOException {
         return trainingRecordService.criarRelatorio();
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @Operation(summary = "Listar", description = "Listar todos agendamentos.")
     public ResponseEntity<Page<TrainingRecord>> listarTodos(
             @RequestParam(required = false) Integer trainingTimeId,
