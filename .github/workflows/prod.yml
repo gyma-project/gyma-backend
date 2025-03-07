@@ -32,11 +32,11 @@ jobs:
       - name: Build docker image
         run: docker build -t gyma:latest ./gyma
 
-      - name: Stop existing containers (if any)
-        run: |
-          docker-compose -f ./gyma/docker-compose.yml down || true
+      #- name: Stop existing containers (if any)
+      #  run: |
+      #    docker-compose -f ./gyma/docker-compose.yml down || true
 
-      - name: Run Docker Compose
-        run: |
-          docker-compose --env-file ./gyma/.env -f ./gyma/docker-compose.yml up -d
+     # - name: Run Docker Compose
+     #   run: |
+     #     docker-compose --env-file ./gyma/.env -f ./gyma/docker-compose.yml up -d
 
