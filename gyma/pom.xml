@@ -181,61 +181,48 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<version>5.2.0</version>
-			<scope>test</scope>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.3.3</version>
 		</dependency>
-
 
 
 	</dependencies>
 
 	<build>
 		<plugins>
-
-			<!-- Tests mutation -->
-			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<version>LATEST</version>
-
-			</plugin>
 			<plugin>
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-maven</artifactId>
 				<version>1.15.2</version>
-
-
+				<configuration>
+					<targetClasses>
+						<param>com.gyma.gyma.controller.*</param>
+						<param>com.gyma.gyma.service.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>com.gyma.gyma.service.*</param>
+					</targetTests>
+					<verbose>true</verbose>
+				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-junit5-plugin</artifactId>
-				<version>1.2.1</version>
-			</plugin>
-
-			<!-- <plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<version>1.15.2</version>
-			</plugin>-->
 
 			<plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
 						<configuration>
 							<excludes>
 								<exclude>com/gyma/gyma/controller/dto/**</exclude>
@@ -247,9 +234,9 @@
 								<exclude>com/gyma/gyma/controller/**</exclude>
 							</excludes>
 						</configuration>
-                    </execution>
-                </executions>
-            </plugin>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -291,8 +278,6 @@
 
 					</annotationProcessorPaths>
 				</configuration>
-
-
 			</plugin>
 		</plugins>
 	</build>
